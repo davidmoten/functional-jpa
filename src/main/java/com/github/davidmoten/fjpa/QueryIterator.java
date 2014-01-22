@@ -38,7 +38,7 @@ public class QueryIterator<T> extends AbstractIterator<T> {
 		return it.get().next();
 	}
 
-	public static <R> Builder<R> query(Query query,Class<R> cls) {
+	static <R> Builder<R> query(Query query,Class<R> cls) {
 		return new Builder<R>(query,cls);
 	}
 

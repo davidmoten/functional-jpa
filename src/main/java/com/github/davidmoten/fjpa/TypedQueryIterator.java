@@ -38,7 +38,7 @@ public class TypedQueryIterator<T> extends AbstractIterator<T> {
 		return it.get().next();
 	}
 
-	public static <R> Builder<R> query(TypedQuery<R> query) {
+	static <R> Builder<R> query(TypedQuery<R> query) {
 		return new Builder<R>(query);
 	}
 
@@ -55,6 +55,7 @@ public class TypedQueryIterator<T> extends AbstractIterator<T> {
 			return this;
 		}
 
+		@Override
 		public Iterator<T> iterator() {
 			return new TypedQueryIterator<T>(query, pageSize);
 		}

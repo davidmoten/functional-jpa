@@ -1,7 +1,7 @@
 package com.github.davidmoten.fjpa;
 
 import static com.github.davidmoten.fjpa.Document.toId;
-import static com.github.davidmoten.fjpa.QueryIterator.query;
+import static com.github.davidmoten.fjpa.Iterators.query;
 import static com.github.davidmoten.fjpa.Util.emf;
 import static com.github.davidmoten.fjpa.Util.insertDocuments;
 import static org.junit.Assert.assertEquals;
