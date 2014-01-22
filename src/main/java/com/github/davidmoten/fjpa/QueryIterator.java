@@ -11,14 +11,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.FluentIterable;
 
-public class QueryIterator<T> extends AbstractIterator<T> {
+ class QueryIterator<T> extends AbstractIterator<T> {
 
 	private final Query query;
+	private final int pageSize;
 
+	// mutable state
 	private Optional<Iterator<T>> it = Optional.absent();
 	private int position = 0;
-
-	private final int pageSize;
 
 	private QueryIterator(Query query, int pageSize, Class<T> cls) {
 		Preconditions.checkNotNull(query);
@@ -26,6 +26,7 @@ public class QueryIterator<T> extends AbstractIterator<T> {
 		this.pageSize = pageSize;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected T computeNext() {
 		if (!it.isPresent() || !it.get().hasNext()) {
@@ -36,10 +37,6 @@ public class QueryIterator<T> extends AbstractIterator<T> {
 		}
 		position++;
 		return it.get().next();
-	}
-
-	static <R> Builder<R> query(Query query,Class<R> cls) {
-		return new Builder<R>(query,cls);
 	}
 
 	public static class Builder<R> implements Iterable<R> {

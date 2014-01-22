@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.FluentIterable;
 
-public class TypedQueryIterator<T> extends AbstractIterator<T> {
+class TypedQueryIterator<T> extends AbstractIterator<T> {
 
 	private final TypedQuery<T> query;
 
@@ -36,10 +36,6 @@ public class TypedQueryIterator<T> extends AbstractIterator<T> {
 		}
 		position++;
 		return it.get().next();
-	}
-
-	static <R> Builder<R> query(TypedQuery<R> query) {
-		return new Builder<R>(query);
 	}
 
 	public static class Builder<T> implements Iterable<T> {
