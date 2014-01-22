@@ -16,7 +16,7 @@ public class TypedQueryIterator<T> extends AbstractIterator<T> {
 	private final TypedQuery<T> query;
 
 	private Optional<Iterator<T>> it = Optional.absent();
-	private int position = 1;
+	private int position = 0;
 
 	private final int pageSize;
 

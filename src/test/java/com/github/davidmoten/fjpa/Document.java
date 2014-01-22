@@ -3,6 +3,8 @@ package com.github.davidmoten.fjpa;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.google.common.base.Function;
+
 @Entity
 public class Document {
 
@@ -10,10 +12,18 @@ public class Document {
 		this.id = id;
 	}
 
-	public Document() {
-	}
-
 	@Id
 	public String id;
+
+	private static Function<Document, String> toId = new Function<Document, String>() {
+		@Override
+		public String apply(Document input) {
+			return input.id;
+		}
+	};
+
+	public static Function<? super Document, String> toId() {
+		return toId;
+	}
 
 }

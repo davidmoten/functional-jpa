@@ -1,15 +1,15 @@
 package com.github.davidmoten.fjpa;
 
-import static org.easymock.EasyMock.createMock;
 import static org.junit.Assert.assertEquals;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.junit.Test;
+
+import com.google.common.collect.Lists;
 
 public class TypedQueryIteratorTest {
 
@@ -17,12 +17,16 @@ public class TypedQueryIteratorTest {
 	public void testEmf() {
 		EntityManager em = emf().createEntityManager();
 		em.getTransaction().begin();
-		Document d = new Document("a");
-		em.persist(d);
+		em.persist(new Document("a"));
+		em.persist(new Document("b"));
+		em.persist(new Document("c"));
 		em.getTransaction().commit();
-		TypedQuery<Document> q = em.createQuery("from Document",
+		TypedQuery<Document> q = em.createQuery("from Document order by id",
 				Document.class);
+		assertEquals(3, TypedQueryIterator.query(q).fluent().size());
 		assertEquals("a", TypedQueryIterator.query(q).iterator().next().id);
+		assertEquals(Lists.newArrayList("a", "b", "c"), TypedQueryIterator
+				.query(q).fluent().transform(Document.toId()).toList());
 	}
 
 	private EntityManagerFactory emf() {
