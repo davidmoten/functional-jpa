@@ -59,7 +59,7 @@ public class TypedQueryIterator<T> extends AbstractIterator<T> {
 			return new TypedQueryIterator<T>(query, pageSize);
 		}
 		
-		public FluentIterable<T> fluentIterator() {
+		public FluentIterable<T> fluent() {
 			return FluentIterable.from(this);
 		}
 	}
