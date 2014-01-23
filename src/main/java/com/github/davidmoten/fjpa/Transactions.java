@@ -4,13 +4,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 
 public class Transactions {
 
-	private static Logger log = Logger.getLogger(Transactions.class);
+	private static org.slf4j.Logger log = LoggerFactory.getLogger(Transactions.class);
 
 	/**
 	 * Runs an entity manager task within a transaction and closes the
