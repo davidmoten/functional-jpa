@@ -50,3 +50,25 @@ List<String> list =
 		.transform(toId())  //get id (lazily)
 		.toList();          //force evaluation to list
 ```
+
+And almost the same for a TypedQuery:
+
+```
+import com.github.davidmoten.fjpa.Iterators;
+
+EntityManager em = emf.createEntityManager();
+em.getTransaction().begin();
+em.persist(new Document("a"));
+em.persist(new Document("b"));
+em.persist(new Document("c"));
+em.getTransaction().commit();
+TypedQuery<Document> q = em.createQuery("from Document order by id",Document.class);
+
+// get a list of all ids in documents
+List<String> list = 
+	Iterators.query(q)
+		.pageSize(2)        //default page size is 100
+	    .fluent()           //as FluentIterable
+		.transform(toId())  //get id (lazily)
+		.toList();          //force evaluation to list
+```
