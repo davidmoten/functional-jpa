@@ -7,7 +7,7 @@ Functional style helpers for jpa and guava
 Query iterators
 ------------------
 
-The class com.github.davidmoten.fjpa.Iterators has fluent style methods that perform lazy iteration of the result set of a query.
+The class `com.github.davidmoten.fjpa.Iterators` has fluent style methods that perform lazy iteration of the result set of a query.
 
 Given this jpa class:
 
