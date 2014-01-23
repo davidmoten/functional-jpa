@@ -71,5 +71,20 @@ public class QueryIteratorTest {
 				.fluent().transform(toId()).toList());
 		emf.close();
 	}
+	
+	@Test
+	public void testForReadme() {
+		EntityManagerFactory emf = emf();
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		em.persist(new Document("a"));
+		em.persist(new Document("b"));
+		em.persist(new Document("c"));
+		em.getTransaction().commit();
+		Query q = em.createQuery("from Document order by id");
+		assertEquals(newArrayList("a", "b", "c"), query(q,Document.class).pageSize(2)
+				.fluent().transform(toId()).toList());
+		emf.close();
+	}
 
 }

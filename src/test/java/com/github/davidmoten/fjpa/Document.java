@@ -22,7 +22,7 @@ public class Document {
 		}
 	};
 
-	public static Function<? super Document, String> toId() {
+	public static Function<Document, String> toId() {
 		return toId;
 	}
 
