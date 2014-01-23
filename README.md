@@ -6,6 +6,7 @@ Functional style helpers for jpa and guava
 
 Query iterators
 ------------------
+
 The class com.github.davidmoten.fjpa.Iterators has fluent style methods that perform lazy iteration of the result set of a query.
 
 Given this jpa class:
@@ -43,7 +44,7 @@ Query q = em.createQuery("from Document order by id");
 
 // get a list of all ids in documents
 List<String> list = 
-	Iterators.query(q,Document.class)
+	Iterators.query(q, Document.class)
 		.pageSize(2)        //default page size is 100
 	    .fluent()           //as FluentIterable
 		.transform(toId())  //get id (lazily)
