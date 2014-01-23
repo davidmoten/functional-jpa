@@ -65,5 +65,9 @@ public class Transactions {
 	public static <T> T run(EntityManagerFactory emf, Task<T> task) {
 		return run(emf, task, true, true).get();
 	}
+	
+	public static <T> Optional<T> runNoThrow(EntityManagerFactory emf, Task<T> task) {
+		return run(emf,task,false,true);
+	}
 
 }
