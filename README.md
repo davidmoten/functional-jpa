@@ -45,7 +45,7 @@ Query q = em.createQuery("from Document order by id");
 // get a list of all ids in documents
 List<String> list = 
 	Iterators.query(q, Document.class)
-		.pageSize(2)        //default page size is 100
+		.pageSize(2000)        //default page size is 100
 	    .fluent()           //as FluentIterable
 		.transform(toId())  //get id (lazily)
 		.toList();          //force evaluation to list
@@ -61,7 +61,7 @@ TypedQuery<Document> q = em.createQuery("from Document order by id",Document.cla
 // get a list of all ids in documents
 List<String> list = 
 	Iterators.query(q)
-		.pageSize(2)        //default page size is 100
+		.pageSize(2000)        //default page size is 100
 	    .fluent()           //as FluentIterable
 		.transform(toId())  //get id (lazily)
 		.toList();          //force evaluation to list
