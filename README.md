@@ -34,12 +34,6 @@ You can do stuff like this:
 ```
 import com.github.davidmoten.fjpa.Iterators;
 
-EntityManager em = emf.createEntityManager();
-em.getTransaction().begin();
-em.persist(new Document("a"));
-em.persist(new Document("b"));
-em.persist(new Document("c"));
-em.getTransaction().commit();
 Query q = em.createQuery("from Document order by id");
 
 // get a list of all ids in documents
