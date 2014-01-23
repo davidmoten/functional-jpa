@@ -32,6 +32,8 @@ public class Document {
 You can do stuff like this:
 
 ```
+import com.github.davidmoten.fjpa.Iterators;
+
 EntityManager em = emf.createEntityManager();
 em.getTransaction().begin();
 em.persist(new Document("a"));
