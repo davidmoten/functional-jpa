@@ -1,7 +1,7 @@
 functional-jpa
 ==============
 
-Functional style helpers for jpa and guava
+Functional style helpers for jpa and guava.
 
 
 Query iterators
