@@ -107,6 +107,20 @@ public class RichEntityManagerFactoryTest {
 		emf.close();
 		assertEquals(2, count);
 	}
+	
+	@Test
+	public void testRunScriptWhneBlankCommand() {
+		StringWriter commands = new StringWriter();
+		commands.write("insert into document(id) values('a');\n");
+		commands.write("      ;\n");
+		commands.write("insert into document(id) values('b');\n");
+		InputStream is = new ByteArrayInputStream(commands.toString()
+				.getBytes());
+		RichEntityManagerFactory emf = emf("test");
+		long count = emf.runScript(is).em().count(Document.class);
+		emf.close();
+		assertEquals(2, count);
+	}
 
 	@Test
 	public void testCreateEntityManager() {

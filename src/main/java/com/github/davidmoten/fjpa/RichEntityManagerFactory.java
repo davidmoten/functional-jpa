@@ -1,6 +1,9 @@
 package com.github.davidmoten.fjpa;
 
 import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Predicates.notNull;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 public class RichEntityManagerFactory {
@@ -154,7 +159,8 @@ public class RichEntityManagerFactory {
 	public RichEntityManagerFactory runScript(InputStream is) {
 		final StringBuffer s = readString(is);
 		String[] items = s.toString().split(";");
-		List<String> commands = Lists.newArrayList(items);
+		List<String> commands = from(newArrayList(items))
+				.filter(notNull()).toList();
 		run(commands);
 		return this;
 	}
@@ -164,12 +170,10 @@ public class RichEntityManagerFactory {
 			@Override
 			public void run(RichEntityManager em) {
 				for (String command : commands) {
-					if (command != null) {
-						log.info(command.trim());
-						if (command.trim().length() > 0)
-							em.get().createNativeQuery(command.trim())
-									.executeUpdate();
-					}
+					log.info(command.trim());
+					if (command.trim().length() > 0)
+						em.get().createNativeQuery(command.trim())
+								.executeUpdate();
 				}
 			}
 		});
