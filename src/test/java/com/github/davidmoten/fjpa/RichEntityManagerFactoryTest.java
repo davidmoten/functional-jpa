@@ -4,6 +4,9 @@ import static com.github.davidmoten.fjpa.Document.toId;
 import static com.github.davidmoten.fjpa.EntityManagers.emf;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -13,6 +16,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 public class RichEntityManagerFactoryTest {
 
@@ -85,17 +89,39 @@ public class RichEntityManagerFactoryTest {
 			}
 		}).emf().close();
 	}
-	
+
 	@Test
 	public void testRunScript() {
 		StringWriter commands = new StringWriter();
 		commands.write("insert into document(id) values('a');\n");
 		commands.write("insert into document(id) values('b');\n");
-		InputStream is = new ByteArrayInputStream(commands.toString().getBytes());
+		InputStream is = new ByteArrayInputStream(commands.toString()
+				.getBytes());
 		RichEntityManagerFactory emf = emf("test");
 		long count = emf.runScript(is).em().count(Document.class);
 		emf.close();
-		assertEquals(2,count);
+		assertEquals(2, count);
+	}
+
+	@Test
+	public void testCreateEntityManager() {
+		emf("test").createEntityManager(Maps.<String, Object> newHashMap())
+				.begin().persist(new Document("a")).commit().close();
+	}
+	
+	@Test 
+	public void testCreateCriteriaBuilder() {
+		RichEntityManagerFactory emf = emf("test");
+		assertNotNull(emf.getCriteriaBuilder());
+		assertNotNull(emf.getMetamodel());
+		assertTrue(emf.isOpen());
+		assertNotNull(emf.getProperties());
+		assertNotNull(emf.getCache());
+		assertNotNull(emf.getPersistenceUnitUtil());
+		assertNotNull(emf.getProperties());
+		emf.close();
+		assertFalse(emf.isOpen());
+		
 	}
 
 }
