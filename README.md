@@ -108,7 +108,9 @@ emf("test")
 				.persist(new Document("b"))
 				.persist(new Document("c"))
 				.createQuery("from Document order by id",
-						Document.class).fluent().transform(toId())
+						Document.class)
+				.fluent()
+				.transform(toId())
 				.toList();
 	}
 }).process(new Processor<List<String>>() {
@@ -123,12 +125,13 @@ or the same again but using Java 8 lambdas for less noise:
 
 ```
 emf("test")
-   .run(em ->
-			  em.persist(new Document("a"))
+   .run(em -> em.persist(new Document("a"))
 				.persist(new Document("b"))
 				.persist(new Document("c"))
 				.createQuery("from Document order by id",
-						Document.class).fluent().transform(toId())
+						Document.class)
+				.fluent()
+				.transform(toId())
 				.toList())
    .process(list ->
 		assertEquals(newArrayList("a", "b", "c"), list))
