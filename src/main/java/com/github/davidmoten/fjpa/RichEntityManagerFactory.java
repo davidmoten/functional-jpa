@@ -35,7 +35,7 @@ public class RichEntityManagerFactory {
 	public RichEntityManager createEntityManager(Map<String, Object> map) {
 		return new RichEntityManager(emf.createEntityManager(map));
 	}
-	
+
 	public RichEntityManager em() {
 		return createEntityManager();
 	}
@@ -111,6 +111,14 @@ public class RichEntityManagerFactory {
 
 	public <T> T run(Task<T> task) {
 		return run(task, true, true).result().get();
+	}
+
+	public <T> TaskResult<T> runWithoutLoggingError(Task<T> task) {
+		return new TaskResult<T>(run(task, true, false).result().get(), this);
+	}
+
+	public <T> TaskOptionalResult<T> runNoLogNoThrow(Task<T> task) {
+		return run(task, false, false);
 	}
 
 	public RichEntityManagerFactory run(final TaskVoid task,
