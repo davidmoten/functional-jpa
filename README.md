@@ -13,6 +13,8 @@ of the result set of a query (which uses `setFirst` and `setMaxResults` for pagi
 To get a rich version of an EntityManagerFactory:
 
     EntityManagers.enrich(normalEmf); 
+    
+Now to an example:
 
 Given this jpa class:
 
@@ -63,9 +65,9 @@ Eliminating try-catch-final noise
 You can also get the `RichEntityManagerFactory` to perform all of the usual try-catch-final closing of resources and logging of errors using the `RichEntityManagerFactory` run method:
 
 ```
-List<String> list = EntityManagers
-		.emf("test")
-		.run(new Task<List<String>>() {
+RichEntityManagerFactory emf = EntityManagers.emf("test");
+List<String> list = 
+		emf.run(new Task<List<String>>() {
 			@Override
 			public List<String> run(RichEntityManager em) {
 				return em
@@ -78,4 +80,5 @@ List<String> list = EntityManagers
 			}
 		});
 assertEquals(newArrayList("a", "b", "c"), list);
+emf.close();
 ```  

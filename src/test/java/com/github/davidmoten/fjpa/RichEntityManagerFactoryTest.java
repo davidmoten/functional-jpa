@@ -26,9 +26,8 @@ public class RichEntityManagerFactoryTest {
 
 	@Test
 	public void testRichEmfRun() {
-		EntityManagers
-		.emf("test")
-		.run(new TaskVoid() {
+		RichEntityManagerFactory emf = EntityManagers.emf("test");
+		emf.run(new TaskVoid() {
 			@Override
 			public void run(RichEntityManager em) {
 				ImmutableList<String> list = em
@@ -45,9 +44,9 @@ public class RichEntityManagerFactoryTest {
 
 	@Test
 	public void testRichEmfRunReturningList() {
-		List<String> list = EntityManagers
-				.emf("test")
-				.run(new Task<List<String>>() {
+		RichEntityManagerFactory emf = EntityManagers.emf("test");
+		List<String> list = 
+				emf.run(new Task<List<String>>() {
 					@Override
 					public List<String> run(RichEntityManager em) {
 						return em
@@ -60,6 +59,7 @@ public class RichEntityManagerFactoryTest {
 					}
 				});
 		assertEquals(newArrayList("a", "b", "c"), list);
+		emf.close();
 	}
 
 }

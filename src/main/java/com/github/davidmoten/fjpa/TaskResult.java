@@ -14,6 +14,11 @@ public class TaskResult<T> {
 		return result;
 	}
 
+	public TaskResult<T> process(Processor<T> processor) {
+		processor.process(result());
+		return this;
+	}
+	
 	public RichEntityManagerFactory emf() {
 		return emf;
 	}
