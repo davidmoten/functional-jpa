@@ -7,7 +7,12 @@ Functional style helpers for jpa and guava.
 Query iterators
 ------------------
 
-The class `com.github.davidmoten.fjpa.Iterators` has fluent style methods that perform lazy iteration of the result set of a query.
+*Rich* versions of `EntityManager.createQuery` method have fluent style and enable lazy iteration 
+of the result set of a query (which uses setFirst and setMaxResults for paging under the covers).
+
+To get a rich version of an EntityManagerFactory:
+
+    RichEntityManagerFactory emf = EntityManagers.enrich(normalEmf); 
 
 Given this jpa class:
 
