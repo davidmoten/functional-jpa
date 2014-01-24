@@ -60,6 +60,18 @@ List<String> list =
 	   .toList();          //force evaluation to list
 ```
 
+or using Java 8 lambdas:
+```
+// get a list of all ids in documents
+List<String> list =
+    em
+       .createQuery("from Document order by id",String.class) 
+	   .pageSize(2000)     //default page size is 100
+	   .fluent()           //as FluentIterable
+	   .transform(d -> d.id)  //get id (lazily)
+	   .toList();          //force evaluation to list
+```
+
 Eliminating try-catch-final noise
 ---------------------------------------
 You can also get the `RichEntityManagerFactory` to perform all of the usual try-catch-final closing of resources and logging of errors using the `RichEntityManagerFactory` run method:
@@ -105,3 +117,20 @@ emf.run(new Task<List<String>>() {
 	}
 }).emf().close();
 ```  
+
+or the same again but using Java 8 lambdas for less noise:
+
+```
+RichEntityManagerFactory emf = EntityManagers.emf("test");
+emf.run(em ->
+			  em.persist(new Document("a"))
+				.persist(new Document("b"))
+				.persist(new Document("c"))
+				.createQuery("from Document order by id",
+						Document.class).fluent().transform(toId())
+				.toList())
+   .process(list ->
+		assertEquals(newArrayList("a", "b", "c"), list))
+	.emf()
+	.close();
+```
