@@ -9,7 +9,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
@@ -107,7 +109,7 @@ public class RichEntityManagerFactoryTest {
 		emf.close();
 		assertEquals(2, count);
 	}
-	
+
 	@Test
 	public void testRunScriptWhneBlankCommand() {
 		StringWriter commands = new StringWriter();
@@ -186,12 +188,12 @@ public class RichEntityManagerFactoryTest {
 	public void testRollbackOnNullTransaction() {
 		RichEntityManagerFactory.rollback(null);
 	}
-	
+
 	@Test
 	public void testCloseEntityManager() {
 		RichEntityManagerFactory.close(null);
 	}
-	
+
 	@Test
 	public void testCloseEntityManagerWhenOpen() {
 		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
@@ -201,7 +203,7 @@ public class RichEntityManagerFactoryTest {
 		RichEntityManagerFactory.close(em);
 		EasyMock.verify(em);
 	}
-	
+
 	@Test
 	public void testCloseEntityManagerWhenClosed() {
 		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
@@ -209,6 +211,14 @@ public class RichEntityManagerFactoryTest {
 		EasyMock.replay(em);
 		RichEntityManagerFactory.close(em);
 		EasyMock.verify(em);
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testReadStringWhenExceptionThrown() throws IOException {
+		BufferedReader br = EasyMock.createMock(BufferedReader.class);
+		EasyMock.expect(br.readLine()).andThrow(new IOException(""));
+		EasyMock.replay(br);
+		RichEntityManagerFactory.readString(br);
 	}
 
 	private TaskVoid taskThrowingException() {

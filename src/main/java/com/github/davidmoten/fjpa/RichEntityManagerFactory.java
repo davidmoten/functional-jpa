@@ -21,6 +21,7 @@ import javax.persistence.metamodel.Metamodel;
 
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicates;
@@ -118,11 +119,13 @@ public class RichEntityManagerFactory {
 		}
 	}
 
+	@VisibleForTesting
 	static void close(RichEntityManager em) {
 		if (em != null && em.isOpen())
 			em.close();
 	}
 
+	@VisibleForTesting
 	static void rollback(EntityTransaction tx) {
 		if (tx != null && tx.isActive())
 			tx.rollback();
@@ -159,8 +162,8 @@ public class RichEntityManagerFactory {
 	public RichEntityManagerFactory runScript(InputStream is) {
 		final StringBuffer s = readString(is);
 		String[] items = s.toString().split(";");
-		List<String> commands = from(newArrayList(items))
-				.filter(notNull()).toList();
+		List<String> commands = from(newArrayList(items)).filter(notNull())
+				.toList();
 		run(commands);
 		return this;
 	}
@@ -179,9 +182,14 @@ public class RichEntityManagerFactory {
 		});
 	}
 
-	private StringBuffer readString(InputStream is) {
-		final StringBuffer s = new StringBuffer();
+	private static StringBuffer readString(InputStream is) {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		return readString(br);
+	}
+
+	@VisibleForTesting
+	static StringBuffer readString(BufferedReader br) {
+		final StringBuffer s = new StringBuffer();
 		String line;
 		try {
 			while ((line = br.readLine()) != null) {
