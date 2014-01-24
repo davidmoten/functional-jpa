@@ -14,8 +14,8 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.transaction.Transaction;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
@@ -171,6 +171,30 @@ public class RichEntityManagerFactoryTest {
 	@Test
 	public void testRollbackOnNullTransaction() {
 		RichEntityManagerFactory.rollback(null);
+	}
+	
+	@Test
+	public void testCloseEntityManager() {
+		RichEntityManagerFactory.close(null);
+	}
+	
+	@Test
+	public void testCloseEntityManagerWhenOpen() {
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.isOpen()).andReturn(true);
+		expect(em.close()).andReturn(em).once();
+		EasyMock.replay(em);
+		RichEntityManagerFactory.close(em);
+		EasyMock.verify(em);
+	}
+	
+	@Test
+	public void testCloseEntityManagerWhenClosed() {
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.isOpen()).andReturn(false);
+		EasyMock.replay(em);
+		RichEntityManagerFactory.close(em);
+		EasyMock.verify(em);
 	}
 
 	private TaskVoid taskThrowingException() {
