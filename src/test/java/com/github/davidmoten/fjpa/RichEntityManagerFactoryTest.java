@@ -128,46 +128,26 @@ public class RichEntityManagerFactoryTest {
 		assertFalse(emf.isOpen());
 	}
 
-	@Test(expected=RuntimeException.class)
+	@Test(expected = RuntimeException.class)
 	public void testTaskThrowsException() {
-		emf("test").run(new TaskVoid() {
-			@Override
-			public void run(RichEntityManager em) {
-				throw new RuntimeException("test exception");
-			}
-		});
+		emf("test").run(taskThrowingException());
 	}
-	
-	@Test(expected=RuntimeException.class)
+
+	@Test(expected = RuntimeException.class)
 	public void testTaskThrowsExceptionNoLog() {
-		emf("test").run(new TaskVoid() {
-			@Override
-			public void run(RichEntityManager em) {
-				throw new RuntimeException("test exception");
-			}
-		},true,false);
+		emf("test").run(taskThrowingException(), true, false);
 	}
-	
+
 	@Test
 	public void testTaskThrowsExceptionNoLogNoThrow() {
-		emf("test").run(new TaskVoid() {
-			@Override
-			public void run(RichEntityManager em) {
-				throw new RuntimeException("test exception");
-			}
-		},false,false);
+		emf("test").run(taskThrowingException(), false, false);
 	}
 
 	@Test
 	public void testTaskThrowsExceptionNoThrow() {
-		emf("test").run(new TaskVoid() {
-			@Override
-			public void run(RichEntityManager em) {
-				throw new RuntimeException("test exception");
-			}
-		},false,true);
+		emf("test").run(taskThrowingException(), false, true);
 	}
-	
+
 	@Test
 	public void testRollbackWhenInactive() {
 		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
@@ -176,7 +156,7 @@ public class RichEntityManagerFactoryTest {
 		RichEntityManagerFactory.rollback(tx);
 		EasyMock.verify(tx);
 	}
-	
+
 	@Test
 	public void testRollbackWhenActive() {
 		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
@@ -192,10 +172,13 @@ public class RichEntityManagerFactoryTest {
 	public void testRollbackOnNullTransaction() {
 		RichEntityManagerFactory.rollback(null);
 	}
-	
-	private Object createMock(Class<Transaction> class1) {
-		// TODO Auto-generated method stub
-		return null;
+
+	private TaskVoid taskThrowingException() {
+		return new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				throw new RuntimeException("test exception");
+			}
+		};
 	}
-	
 }
