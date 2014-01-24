@@ -131,6 +131,5 @@ emf.run(em ->
 				.toList())
    .process(list ->
 		assertEquals(newArrayList("a", "b", "c"), list))
-	.emf()
-	.close();
+	.emf().close();
 ```
