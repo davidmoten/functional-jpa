@@ -98,8 +98,8 @@ emf.close();
 or using method chaining even further for the same result:
 
 ```
-RichEntityManagerFactory emf = EntityManagers.emf("test");
-emf.run(new Task<List<String>>() {
+emf("test") 
+  .run(new Task<List<String>>() {
 	@Override
 	public List<String> run(RichEntityManager em) {
 		return em
@@ -121,8 +121,8 @@ emf.run(new Task<List<String>>() {
 or the same again but using Java 8 lambdas for less noise:
 
 ```
-RichEntityManagerFactory emf = EntityManagers.emf("test");
-emf.run(em ->
+emf("test")
+   .run(em ->
 			  em.persist(new Document("a"))
 				.persist(new Document("b"))
 				.persist(new Document("c"))
