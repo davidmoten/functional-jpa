@@ -3,6 +3,7 @@ functional-jpa
 
 Functional style helpers for jpa and guava.
 
+Status: *pre-alpha*
 
 Query iterators
 ------------------
