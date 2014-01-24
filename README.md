@@ -8,11 +8,11 @@ Query iterators
 ------------------
 
 *Rich* versions of `EntityManager.createQuery` method have fluent style and enable lazy iteration 
-of the result set of a query (which uses setFirst and setMaxResults for paging under the covers).
+of the result set of a query (which uses `setFirst` and `setMaxResults` for paging under the covers).
 
 To get a rich version of an EntityManagerFactory:
 
-    RichEntityManagerFactory emf = EntityManagers.enrich(normalEmf); 
+    EntityManagers.enrich(normalEmf); 
 
 Given this jpa class:
 
