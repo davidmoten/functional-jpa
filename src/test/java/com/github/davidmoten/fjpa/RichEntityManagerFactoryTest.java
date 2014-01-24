@@ -3,6 +3,7 @@ package com.github.davidmoten.fjpa;
 import static com.github.davidmoten.fjpa.Document.toId;
 import static com.github.davidmoten.fjpa.EntityManagers.emf;
 import static com.google.common.collect.Lists.newArrayList;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -13,6 +14,10 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 
+import javax.persistence.EntityTransaction;
+import javax.transaction.Transaction;
+
+import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
@@ -108,8 +113,8 @@ public class RichEntityManagerFactoryTest {
 		emf("test").createEntityManager(Maps.<String, Object> newHashMap())
 				.begin().persist(new Document("a")).commit().close();
 	}
-	
-	@Test 
+
+	@Test
 	public void testCreateCriteriaBuilder() {
 		RichEntityManagerFactory emf = emf("test");
 		assertNotNull(emf.getCriteriaBuilder());
@@ -121,7 +126,76 @@ public class RichEntityManagerFactoryTest {
 		assertNotNull(emf.getProperties());
 		emf.close();
 		assertFalse(emf.isOpen());
-		
 	}
 
+	@Test(expected=RuntimeException.class)
+	public void testTaskThrowsException() {
+		emf("test").run(new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				throw new RuntimeException("test exception");
+			}
+		});
+	}
+	
+	@Test(expected=RuntimeException.class)
+	public void testTaskThrowsExceptionNoLog() {
+		emf("test").run(new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				throw new RuntimeException("test exception");
+			}
+		},true,false);
+	}
+	
+	@Test
+	public void testTaskThrowsExceptionNoLogNoThrow() {
+		emf("test").run(new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				throw new RuntimeException("test exception");
+			}
+		},false,false);
+	}
+
+	@Test
+	public void testTaskThrowsExceptionNoThrow() {
+		emf("test").run(new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				throw new RuntimeException("test exception");
+			}
+		},false,true);
+	}
+	
+	@Test
+	public void testRollbackWhenInactive() {
+		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
+		expect(tx.isActive()).andReturn(false);
+		EasyMock.replay(tx);
+		RichEntityManagerFactory.rollback(tx);
+		EasyMock.verify(tx);
+	}
+	
+	@Test
+	public void testRollbackWhenActive() {
+		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
+		expect(tx.isActive()).andReturn(true);
+		tx.rollback();
+		EasyMock.expectLastCall().once();
+		EasyMock.replay(tx);
+		RichEntityManagerFactory.rollback(tx);
+		EasyMock.verify(tx);
+	}
+
+	@Test
+	public void testRollbackOnNullTransaction() {
+		RichEntityManagerFactory.rollback(null);
+	}
+	
+	private Object createMock(Class<Transaction> class1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

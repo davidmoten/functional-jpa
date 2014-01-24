@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Cache;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 public class RichEntityManagerFactory {
 
@@ -99,8 +101,7 @@ public class RichEntityManagerFactory {
 			tx.commit();
 			return new TaskOptionalResult<T>(fromNullable(t), this);
 		} catch (RuntimeException e) {
-			if (tx != null && tx.isActive())
-				tx.rollback();
+			rollback(tx);
 			if (logException)
 				log.error(e.getMessage(), e);
 			if (throwException)
@@ -108,9 +109,18 @@ public class RichEntityManagerFactory {
 			else
 				return new TaskOptionalResult<T>(Optional.<T> absent(), this);
 		} finally {
-			if (em != null && em.isOpen())
-				em.close();
+			close(em);
 		}
+	}
+
+	static void close(RichEntityManager em) {
+		if (em != null && em.isOpen())
+			em.close();
+	}
+
+	static void rollback(EntityTransaction tx) {
+		if (tx != null && tx.isActive())
+			tx.rollback();
 	}
 
 	public <T> TaskResult<T> run(Task<T> task) {
@@ -142,6 +152,30 @@ public class RichEntityManagerFactory {
 	}
 
 	public RichEntityManagerFactory runScript(InputStream is) {
+		final StringBuffer s = readString(is);
+		String[] items = s.toString().split(";");
+		List<String> commands = Lists.newArrayList(items);
+		run(commands);
+		return this;
+	}
+
+	public void run(final List<String> commands) {
+		run(new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				for (String command : commands) {
+					if (command != null) {
+						log.info(command.trim());
+						if (command.trim().length() > 0)
+							em.get().createNativeQuery(command.trim())
+									.executeUpdate();
+					}
+				}
+			}
+		});
+	}
+
+	private StringBuffer readString(InputStream is) {
 		final StringBuffer s = new StringBuffer();
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String line;
@@ -155,21 +189,6 @@ public class RichEntityManagerFactory {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
-		run(new TaskVoid() {
-			@Override
-			public void run(RichEntityManager em) {
-				String[] commands = s.toString().split(";");
-				for (String command : commands) {
-					if (command != null) {
-						log.info(command.trim());
-						if (command.trim().length() > 0)
-							em.get().createNativeQuery(command.trim())
-									.executeUpdate();
-					}
-				}
-			}
-		});
-		return this;
+		return s;
 	}
 }
