@@ -52,3 +52,25 @@ List<String> list =
 	   .transform(toId())  //get id (lazily)
 	   .toList();          //force evaluation to list
 ```
+
+Eliminating try-catch-final noise
+---------------------------------------
+You can also get the `RichEntityManagerFactory` to perform all of the usual try-catch-final closing of resources and logging of errors using the `RichEntityManagerFactory` run method:
+
+```
+List<String> list = EntityManagers
+		.emf("test")
+		.run(new Task<List<String>>() {
+			@Override
+			public List<String> run(RichEntityManager em) {
+				return em
+						.persist(new Document("a"))
+						.persist(new Document("b"))
+						.persist(new Document("c"))
+						.createQuery("from Document order by id",
+								Document.class).fluent()
+						.transform(toId()).toList();
+			}
+		});
+assertEquals(newArrayList("a", "b", "c"), list);
+```  
