@@ -5,6 +5,9 @@ import static com.github.davidmoten.fjpa.EntityManagers.emf;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.List;
 
 import org.junit.Test;
@@ -81,6 +84,18 @@ public class RichEntityManagerFactoryTest {
 				assertEquals(newArrayList("a", "b", "c"), list);
 			}
 		}).emf().close();
+	}
+	
+	@Test
+	public void testRunScript() {
+		StringWriter commands = new StringWriter();
+		commands.write("insert into document(id) values('a');\n");
+		commands.write("insert into document(id) values('b');\n");
+		InputStream is = new ByteArrayInputStream(commands.toString().getBytes());
+		RichEntityManagerFactory emf = emf("test");
+		long count = emf.runScript(is).em().count(Document.class);
+		emf.close();
+		assertEquals(2,count);
 	}
 
 }

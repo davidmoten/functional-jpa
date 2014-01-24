@@ -34,7 +34,7 @@ public class RichEntityManager {
 		em.persist(entity);
 		return this;
 	}
-	
+
 	public RichEntityManager begin() {
 		em.getTransaction().begin();
 		return this;
@@ -48,9 +48,14 @@ public class RichEntityManager {
 		em.remove(entity);
 		return this;
 	}
-	
+
 	public <T> TypedQueryIterator.Builder<T> findAll(Class<T> entityClass) {
-		return createQuery("select from " + entityClass.getName(),entityClass);
+		return createQuery("select from " + entityClass.getName(), entityClass);
+	}
+
+	public <T> long count(Class<T> entityClass) {
+		return createQuery("select count(*) from " + entityClass.getName(),
+				Long.class).fluent().first().get();
 	}
 
 	public <T> Optional<T> find(Class<T> entityClass, Object primaryKey) {
@@ -160,28 +165,32 @@ public class RichEntityManager {
 		return query(em.createQuery(criteriaQuery));
 	}
 
-	public <T> TypedQueryIterator.Builder<T> createQuery(String qlString, Class<T> resultClass) {
-		return query(em.createQuery(qlString,resultClass));
+	public <T> TypedQueryIterator.Builder<T> createQuery(String qlString,
+			Class<T> resultClass) {
+		return query(em.createQuery(qlString, resultClass));
 	}
 
 	public QueryIterator.Builder<Object> createNamedQuery(String name) {
-		return Iterators.query(em.createNamedQuery(name),Object.class);
+		return Iterators.query(em.createNamedQuery(name), Object.class);
 	}
 
 	public <T> Builder<T> createNamedQuery(String name, Class<T> resultClass) {
-		return Iterators.query(em.createNamedQuery(name,resultClass));
+		return Iterators.query(em.createNamedQuery(name, resultClass));
 	}
 
 	public QueryIterator.Builder<Object> createNativeQuery(String sqlString) {
-		return Iterators.query(em.createNativeQuery(sqlString),Object.class);
+		return Iterators.query(em.createNativeQuery(sqlString), Object.class);
 	}
 
-	public <T> QueryIterator.Builder<T> createNativeQuery(String sqlString, Class<T> resultClass) {
-		return query(em.createNativeQuery(sqlString,resultClass),resultClass);
+	public <T> QueryIterator.Builder<T> createNativeQuery(String sqlString,
+			Class<T> resultClass) {
+		return query(em.createNativeQuery(sqlString, resultClass), resultClass);
 	}
 
-	public QueryIterator.Builder<Object> createNativeQuery(String sqlString, String resultSetMapping) {
-		return query(em.createNativeQuery(sqlString,resultSetMapping),Object.class);
+	public QueryIterator.Builder<Object> createNativeQuery(String sqlString,
+			String resultSetMapping) {
+		return query(em.createNativeQuery(sqlString, resultSetMapping),
+				Object.class);
 	}
 
 	public RichEntityManager joinTransaction() {
@@ -201,7 +210,7 @@ public class RichEntityManager {
 		em.close();
 		return this;
 	}
-	
+
 	public RichEntityManager closeAll() {
 		em.close();
 		em.getEntityManagerFactory().close();

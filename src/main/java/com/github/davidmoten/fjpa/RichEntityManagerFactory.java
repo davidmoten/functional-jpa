@@ -2,6 +2,10 @@ package com.github.davidmoten.fjpa;
 
 import static com.google.common.base.Optional.fromNullable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 
 import javax.persistence.Cache;
@@ -110,7 +114,7 @@ public class RichEntityManagerFactory {
 	}
 
 	public <T> TaskResult<T> run(Task<T> task) {
-		return new TaskResult<T>(run(task, true, true).result().get(),this);
+		return new TaskResult<T>(run(task, true, true).result().get(), this);
 	}
 
 	public <T> TaskResult<T> runWithoutLoggingError(Task<T> task) {
@@ -135,5 +139,37 @@ public class RichEntityManagerFactory {
 
 	public RichEntityManagerFactory run(TaskVoid task) {
 		return run(task, true, true);
+	}
+
+	public RichEntityManagerFactory runScript(InputStream is) {
+		final StringBuffer s = new StringBuffer();
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		String line;
+		try {
+			while ((line = br.readLine()) != null) {
+				if (s.length() > 0)
+					s.append('\n');
+				s.append(line);
+			}
+			br.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		run(new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				String[] commands = s.toString().split(";");
+				for (String command : commands) {
+					if (command != null) {
+						log.info(command.trim());
+						if (command.trim().length() > 0)
+							em.get().createNativeQuery(command.trim())
+									.executeUpdate();
+					}
+				}
+			}
+		});
+		return this;
 	}
 }
