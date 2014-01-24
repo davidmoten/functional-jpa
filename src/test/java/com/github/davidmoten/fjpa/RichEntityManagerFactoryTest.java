@@ -45,21 +45,42 @@ public class RichEntityManagerFactoryTest {
 	@Test
 	public void testRichEmfRunReturningList() {
 		RichEntityManagerFactory emf = EntityManagers.emf("test");
-		List<String> list = 
-				emf.run(new Task<List<String>>() {
-					@Override
-					public List<String> run(RichEntityManager em) {
-						return em
-								.persist(new Document("a"))
-								.persist(new Document("b"))
-								.persist(new Document("c"))
-								.createQuery("from Document order by id",
-										Document.class).fluent()
-								.transform(toId()).toList();
-					}
-				});
+		List<String> list = emf.run(new Task<List<String>>() {
+			@Override
+			public List<String> run(RichEntityManager em) {
+				return em
+						.persist(new Document("a"))
+						.persist(new Document("b"))
+						.persist(new Document("c"))
+						.createQuery("from Document order by id",
+								Document.class).fluent().transform(toId())
+						.toList();
+			}
+		}).result();
 		assertEquals(newArrayList("a", "b", "c"), list);
 		emf.close();
+	}
+
+	@Test
+	public void testRichEmfRunReturningListAndUsingProcessor() {
+		RichEntityManagerFactory emf = EntityManagers.emf("test");
+		emf.run(new Task<List<String>>() {
+			@Override
+			public List<String> run(RichEntityManager em) {
+				return em
+						.persist(new Document("a"))
+						.persist(new Document("b"))
+						.persist(new Document("c"))
+						.createQuery("from Document order by id",
+								Document.class).fluent().transform(toId())
+						.toList();
+			}
+		}).process(new Processor<List<String>>() {
+			@Override
+			public void process(List<String> list) {
+				assertEquals(newArrayList("a", "b", "c"), list);
+			}
+		}).emf().close();
 	}
 
 }

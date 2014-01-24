@@ -81,4 +81,27 @@ List<String> list =
 		});
 assertEquals(newArrayList("a", "b", "c"), list);
 emf.close();
+```
+
+or using method chaining even further for the same result:
+
+```
+RichEntityManagerFactory emf = EntityManagers.emf("test");
+emf.run(new Task<List<String>>() {
+	@Override
+	public List<String> run(RichEntityManager em) {
+		return em
+				.persist(new Document("a"))
+				.persist(new Document("b"))
+				.persist(new Document("c"))
+				.createQuery("from Document order by id",
+						Document.class).fluent().transform(toId())
+				.toList();
+	}
+}).process(new Processor<List<String>>() {
+	@Override
+	public void process(List<String> list) {
+		assertEquals(newArrayList("a", "b", "c"), list);
+	}
+}).emf().close();
 ```  

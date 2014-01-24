@@ -109,8 +109,8 @@ public class RichEntityManagerFactory {
 		}
 	}
 
-	public <T> T run(Task<T> task) {
-		return run(task, true, true).result().get();
+	public <T> TaskResult<T> run(Task<T> task) {
+		return new TaskResult<T>(run(task, true, true).result().get(),this);
 	}
 
 	public <T> TaskResult<T> runWithoutLoggingError(Task<T> task) {
