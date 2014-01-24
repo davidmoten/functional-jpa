@@ -38,31 +38,17 @@ public class Document {
 You can do stuff like this:
 
 ```
-import com.github.davidmoten.fjpa.Iterators;
+import com.github.davidmoten.fjpa.EntityManagers;
 
-Query q = em.createQuery("from Document order by id");
-
-// get a list of all ids in documents
-List<String> list = 
-	Iterators.query(q, Document.class)
-		.pageSize(2000)        //default page size is 100
-	    .fluent()           //as FluentIterable
-		.transform(toId())  //get id (lazily)
-		.toList();          //force evaluation to list
-```
-
-And almost the same for a TypedQuery:
-
-```
-import com.github.davidmoten.fjpa.Iterators;
-
-TypedQuery<Document> q = em.createQuery("from Document order by id",Document.class);
+RichEntityManagerFactory emf = EntityManagers.emf("test");
+RichEntityManager em = emf.createEntityManager();
 
 // get a list of all ids in documents
-List<String> list = 
-	Iterators.query(q)
-		.pageSize(2000)        //default page size is 100
-	    .fluent()           //as FluentIterable
-		.transform(toId())  //get id (lazily)
-		.toList();          //force evaluation to list
+List<String> list =
+    em
+       .createQuery("from Document order by id",String.class) 
+	   .pageSize(2000)     //default page size is 100
+	   .fluent()           //as FluentIterable
+	   .transform(toId())  //get id (lazily)
+	   .toList();          //force evaluation to list
 ```

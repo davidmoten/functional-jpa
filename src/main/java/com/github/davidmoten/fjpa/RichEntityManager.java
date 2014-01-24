@@ -6,7 +6,6 @@ import static com.google.common.base.Optional.fromNullable;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
@@ -35,6 +34,11 @@ public class RichEntityManager {
 		em.persist(entity);
 		return this;
 	}
+	
+	public RichEntityManager begin() {
+		em.getTransaction().begin();
+		return this;
+	}
 
 	public <T> T merge(T entity) {
 		return em.merge(entity);
@@ -43,6 +47,10 @@ public class RichEntityManager {
 	public RichEntityManager remove(Object entity) {
 		em.remove(entity);
 		return this;
+	}
+	
+	public <T> TypedQueryIterator.Builder<T> findAll(Class<T> entityClass) {
+		return createQuery("select from " + entityClass.getName(),entityClass);
 	}
 
 	public <T> Optional<T> find(Class<T> entityClass, Object primaryKey) {
@@ -193,6 +201,12 @@ public class RichEntityManager {
 		em.close();
 		return this;
 	}
+	
+	public RichEntityManager closeAll() {
+		em.close();
+		em.getEntityManagerFactory().close();
+		return this;
+	}
 
 	public boolean isOpen() {
 		return em.isOpen();
@@ -202,8 +216,8 @@ public class RichEntityManager {
 		return em.getTransaction();
 	}
 
-	public EntityManagerFactory getEntityManagerFactory() {
-		return em.getEntityManagerFactory();
+	public RichEntityManagerFactory getEntityManagerFactory() {
+		return new RichEntityManagerFactory(em.getEntityManagerFactory());
 	}
 
 	public CriteriaBuilder getCriteriaBuilder() {
@@ -212,6 +226,15 @@ public class RichEntityManager {
 
 	public Metamodel getMetamodel() {
 		return em.getMetamodel();
+	}
+
+	public RichEntityManager commit() {
+		em.getTransaction().commit();
+		return this;
+	}
+
+	public RichEntityManagerFactory emf() {
+		return getEntityManagerFactory();
 	}
 
 }
