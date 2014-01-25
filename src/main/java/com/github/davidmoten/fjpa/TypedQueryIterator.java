@@ -104,15 +104,15 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 			return query.getParameter(arg0);
 		}
 
-		public <T> Parameter<T> getParameter(String arg0, Class<T> arg1) {
+		public <R> Parameter<R> getParameter(String arg0, Class<R> arg1) {
 			return query.getParameter(arg0, arg1);
 		}
 
-		public <T> Parameter<T> getParameter(int arg0, Class<T> arg1) {
+		public <R> Parameter<R> getParameter(int arg0, Class<R> arg1) {
 			return query.getParameter(arg0, arg1);
 		}
 
-		public <T> T getParameterValue(Parameter<T> arg0) {
+		public <R> R getParameterValue(Parameter<R> arg0) {
 			return query.getParameterValue(arg0);
 		}
 
@@ -132,7 +132,7 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 			return query.isBound(arg0);
 		}
 
-		public <T> T unwrap(Class<T> arg0) {
+		public <R> R unwrap(Class<R> arg0) {
 			return query.unwrap(arg0);
 		}
 

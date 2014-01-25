@@ -108,15 +108,15 @@ class QueryIterator<T> extends AbstractIterator<T> {
 			return query.getParameter(arg0);
 		}
 
-		public <R> Parameter<R> getParameter(String arg0, Class<R> arg1) {
+		public <S> Parameter<S> getParameter(String arg0, Class<S> arg1) {
+			return (Parameter<S>) query.getParameter(arg0, arg1);
+		}
+
+		public <S> Parameter<S> getParameter(int arg0, Class<S> arg1) {
 			return query.getParameter(arg0, arg1);
 		}
 
-		public <R> Parameter<R> getParameter(int arg0, Class<R> arg1) {
-			return query.getParameter(arg0, arg1);
-		}
-
-		public <R> R getParameterValue(Parameter<R> arg0) {
+		public <S> S getParameterValue(Parameter<S> arg0) {
 			return query.getParameterValue(arg0);
 		}
 
@@ -136,14 +136,16 @@ class QueryIterator<T> extends AbstractIterator<T> {
 			return query.isBound(arg0);
 		}
 
-		public <R> R unwrap(Class<R> arg0) {
+		public <S> S unwrap(Class<S> arg0) {
 			return query.unwrap(arg0);
 		}
 
+		@SuppressWarnings("unchecked")
 		public FluentIterable<R> getResultList() {
 			return FluentIterable.from((List<R>)query.getResultList());
 		}
 
+		@SuppressWarnings("unchecked")
 		public R getSingleResult() {
 			return (R) query.getSingleResult();
 		}
