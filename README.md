@@ -151,7 +151,7 @@ I love it but its a bit verbose so I added a simple `FuncitoHelper` class to fun
 Function<Document,String> toId = f(c(Document.class).getId();
 ```
 
-Here's an example using functional-jpa:
+Here's an example using functional-jpa that is very close in conciseness to using Java 8 lambdas:
 ```
 import com.github.davidmoten.fjpa.EntityManagers;
 
