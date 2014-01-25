@@ -2,9 +2,18 @@ package com.github.davidmoten.fjpa;
 
 import static com.google.common.base.Optional.of;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import javax.persistence.FlushModeType;
+import javax.persistence.LockModeType;
+import javax.persistence.Parameter;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
@@ -65,6 +74,151 @@ class QueryIterator<T> extends AbstractIterator<T> {
 
 		public FluentIterable<R> fluent() {
 			return FluentIterable.from(this);
+		}
+		
+		public int executeUpdate() {
+			return query.executeUpdate();
+		}
+
+		public int getFirstResult() {
+			return query.getFirstResult();
+		}
+
+		public FlushModeType getFlushMode() {
+			return query.getFlushMode();
+		}
+
+		public Map<String, Object> getHints() {
+			return query.getHints();
+		}
+
+		public LockModeType getLockMode() {
+			return query.getLockMode();
+		}
+
+		public int getMaxResults() {
+			return query.getMaxResults();
+		}
+
+		public Parameter<?> getParameter(String arg0) {
+			return query.getParameter(arg0);
+		}
+
+		public Parameter<?> getParameter(int arg0) {
+			return query.getParameter(arg0);
+		}
+
+		public <R> Parameter<R> getParameter(String arg0, Class<R> arg1) {
+			return query.getParameter(arg0, arg1);
+		}
+
+		public <R> Parameter<R> getParameter(int arg0, Class<R> arg1) {
+			return query.getParameter(arg0, arg1);
+		}
+
+		public <R> R getParameterValue(Parameter<R> arg0) {
+			return query.getParameterValue(arg0);
+		}
+
+		public Object getParameterValue(String arg0) {
+			return query.getParameterValue(arg0);
+		}
+
+		public Object getParameterValue(int arg0) {
+			return query.getParameterValue(arg0);
+		}
+
+		public Set<Parameter<?>> getParameters() {
+			return query.getParameters();
+		}
+
+		public boolean isBound(Parameter<?> arg0) {
+			return query.isBound(arg0);
+		}
+
+		public <R> R unwrap(Class<R> arg0) {
+			return query.unwrap(arg0);
+		}
+
+		public FluentIterable<R> getResultList() {
+			return FluentIterable.from((List<R>)query.getResultList());
+		}
+
+		public R getSingleResult() {
+			return (R) query.getSingleResult();
+		}
+
+		public Builder<R> firstResult(int arg0) {
+			query.setFirstResult(0);
+			return this;
+		}
+
+		public Builder<R> flushMode(FlushModeType arg0) {
+			query.setFlushMode(arg0);
+			return this;
+		}
+
+		public Builder<R> hint(String arg0, Object arg1) {
+			query.setHint(arg0, arg1);
+			return this;
+		}
+
+		public Builder<R> lockMode(LockModeType arg0) {
+			query.setLockMode(arg0);
+			return this;
+		}
+
+		public Builder<R> maxResults(int arg0) {
+			query.setMaxResults(arg0);
+			return this;
+		}
+
+		public Builder<R> parameter(Parameter<R> arg0, R arg1) {
+			query.setParameter(arg0, arg1);
+			return this;
+		}
+
+		public Builder<R> parameter(String arg0, Object arg1) {
+			query.setParameter(arg0, arg1);
+			return this;
+		}
+
+		public Builder<R> parameter(int arg0, Object arg1) {
+			query.setParameter(arg0, arg1);
+			return this;
+		}
+
+		public Builder<R> parameter(Parameter<Calendar> arg0, Calendar arg1,
+				TemporalType arg2) {
+			query.setParameter(arg0, arg1, arg2);
+			return this;
+		}
+
+		public Builder<R> parameter(Parameter<Date> arg0, Date arg1,
+				TemporalType arg2) {
+			query.setParameter(arg0, arg1);
+			return this;
+		}
+
+		public Builder<R> parameter(String arg0, Calendar arg1,
+				TemporalType arg2) {
+			query.setParameter(arg0, arg1, arg2);
+			return this;
+		}
+
+		public Builder<R> parameter(String arg0, Date arg1, TemporalType arg2) {
+			query.setParameter(arg0, arg1, arg2);
+			return this;
+		}
+
+		public Builder<R> parameter(int arg0, Calendar arg1, TemporalType arg2) {
+			query.setParameter(arg0, arg1, arg2);
+			return this;
+		}
+
+		public Builder<R> parameter(int arg0, Date arg1, TemporalType arg2) {
+			query.setParameter(arg0, arg1, arg2);
+			return this;
 		}
 	}
 }
