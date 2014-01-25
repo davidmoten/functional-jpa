@@ -6,6 +6,7 @@ import static com.github.davidmoten.fjpa.TestingUtil.emf;
 import static com.github.davidmoten.fjpa.TestingUtil.insertDocuments;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -67,6 +68,16 @@ public class QueryIteratorTest {
 		Query q = em.createQuery("from Document order by id");
 		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
 				.pageSize(1).fluent().transform(toId()).toList());
+		emf.close();
+	}
+	
+	@Test
+	public void testGetOriginalQuery() {
+		EntityManagerFactory emf = emf();
+		EntityManager em = emf.createEntityManager();
+		insertDocuments(em);
+		Query q = em.createQuery("from Document order by id");
+		assertTrue(query(q,Document.class).get() instanceof Query);
 		emf.close();
 	}
 
