@@ -135,3 +135,35 @@ emf("test")
 		assertEquals(newArrayList("a", "b", "c"), list))
 	.emf().close();
 ```
+
+Funcito helper methods
+--------------------------
+Funcito is a great tool in the absence of Java 8. The methods `FuncitoGuava.functionFor` combined with `FuncitoGuava.callsTo` allow 
+wonderfully concise creation of Guava Functions.
+
+For example:
+```
+Function<Document,String> toId = functionFor(callsTo(Document.class).getId());
+```
+
+I love it but its a bit verbose so I added a simple `FuncitoHelper` class to functional-jpa that allows for an abbreviated version:
+```
+Function<Document,String> toId = f(c(Document.class).getId();
+```
+
+Here's an example in anger:
+```
+import com.github.davidmoten.fjpa.EntityManagers;
+
+RichEntityManagerFactory emf = EntityManagers.emf("test");
+RichEntityManager em = emf.createEntityManager();
+
+// get a list of all ids in documents
+List<String> list =
+    em
+       .createQuery("from Document order by id",String.class) 
+	   .pageSize(2000)     //default page size is 100
+	   .fluent()           //as FluentIterable
+	   .transform(f(c(Document.class).getId())  //get id (lazily)
+	   .toList();          //force evaluation to list
+```
