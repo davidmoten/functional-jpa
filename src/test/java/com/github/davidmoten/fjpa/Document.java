@@ -1,8 +1,14 @@
 package com.github.davidmoten.fjpa;
 
+import static org.funcito.Funcito.callsTo;
+import static org.funcito.FuncitoGuava.functionFor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+
+import org.funcito.Funcito;
+import org.funcito.FuncitoGuava;
 
 import com.google.common.base.Function;
 
@@ -14,17 +20,16 @@ public class Document {
 	}
 
 	@Id
-	public String id;
+	private String id;
+
+	public String getId() {
+		return id;
+	}
 
 	@Column
 	public String status;
 
-	private static Function<Document, String> toId = new Function<Document, String>() {
-		@Override
-		public String apply(Document input) {
-			return input.id;
-		}
-	};
+	private static Function<Document, String> toId = functionFor(callsTo(Document.class).getId());
 
 	public static Function<Document, String> toId() {
 		return toId;
