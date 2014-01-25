@@ -38,6 +38,7 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 
 	@Override
 	protected T computeNext() {
+		System.out.println("computing next, position="+ position);
 		if (!it.isPresent() || !it.get().hasNext()) {
 			it = of(query.setFirstResult(position).setMaxResults(pageSize)
 					.getResultList().iterator());

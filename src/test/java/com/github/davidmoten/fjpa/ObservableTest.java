@@ -32,20 +32,22 @@ public class ObservableTest {
 		observable.subscribe(new Observer<List<String>>() {
 			@Override
 			public void onCompleted() {
-				
+				System.out.println("onCompleted");
+//				em.closeFactory();
 			}
 
 			@Override
 			public void onError(Throwable e) {
 				log.error(e.getMessage(), e);
+				em.closeFactory();
 			}
 
 			@Override
 			public void onNext(List<String> list) {
-
+				System.out.println(list);
 			}
 		});
-		List<String> list = observable.toBlockingObservable().last();
+		List<String> list = observable.toBlockingObservable().single();
 		assertEquals(newArrayList("a", "b", "c"), list);
 		em.closeFactory();
 		log.info("finished");

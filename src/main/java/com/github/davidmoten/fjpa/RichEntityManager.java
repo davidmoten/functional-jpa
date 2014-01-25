@@ -227,8 +227,10 @@ public class RichEntityManager {
 	}
 
 	public RichEntityManager closeFactory() {
-		em.close();
-		em.getEntityManagerFactory().close();
+		if (em.isOpen())
+			em.close();
+		if (em.getEntityManagerFactory().isOpen())
+			em.getEntityManagerFactory().close();
 		return this;
 	}
 
