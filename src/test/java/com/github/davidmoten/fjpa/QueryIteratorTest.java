@@ -1,6 +1,8 @@
 package com.github.davidmoten.fjpa;
 
 import static com.github.davidmoten.fjpa.Document.toId;
+import static com.github.davidmoten.fjpa.FuncitoHelper.c;
+import static com.github.davidmoten.fjpa.FuncitoHelper.f;
 import static com.github.davidmoten.fjpa.Iterators.query;
 import static com.github.davidmoten.fjpa.TestingUtil.emf;
 import static com.github.davidmoten.fjpa.TestingUtil.insertDocuments;
@@ -37,6 +39,18 @@ public class QueryIteratorTest {
 				.transform(toId).toList());
 		emf.close();
 	}
+	
+	@Test
+	public void testIteratorReturnsPartialListOfDocumentsUsingFuncitoHelper() {
+		EntityManagerFactory emf = emf();
+		EntityManager em = emf.createEntityManager();
+		insertDocuments(em);
+		Query q = em.createQuery("from Document where id > 'a' order by id");
+		assertEquals(newArrayList("b", "c"), query(q, Document.class).fluent()
+				.transform(f(c(Document.class).getId())).toList());
+		emf.close();
+	}
+	
 
 	@Test
 	public void testIteratorReturnsNoDocuments() {

@@ -80,7 +80,6 @@
       <groupId>com.googlecode.funcito</groupId>
       <artifactId>funcito</artifactId>
       <version>1.3.0</version>
-      <scope>runtime</scope>
     </dependency>
 
     <!-- Test Dependencies -->
