@@ -22,13 +22,12 @@ Given this jpa class (note the use of Funcito to create the guava function for i
 ```
 @Entity
 public class Document {
+    @Id
+	private String id;
 
 	public Document(String id) {
 		this.id = id;
 	}
-
-	@Id
-	private String id;
 
 	public String getId() {
 		return id;
@@ -37,8 +36,8 @@ public class Document {
 	@Column
 	public String status;
 
-	public static Function<Document, String> toId = functionFor(callsTo(Document.class).getId());
-
+	public static Function<Document, String> toId = functionFor(callsTo(
+			Document.class).getId());
 }
 ```
 You can do stuff like this:
