@@ -40,7 +40,7 @@ public class RichEntityManagerFactoryTest {
 				.createQuery("from Document order by id", Document.class)
 				.fluent().transform(toId).toList();
 		assertEquals(newArrayList("a", "b", "c"), list);
-		em.closeAll();
+		em.closeFactory();
 	}
 
 	@Test

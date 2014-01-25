@@ -226,7 +226,7 @@ public class RichEntityManager {
 		return this;
 	}
 
-	public RichEntityManager closeAll() {
+	public RichEntityManager closeFactory() {
 		em.close();
 		em.getEntityManagerFactory().close();
 		return this;

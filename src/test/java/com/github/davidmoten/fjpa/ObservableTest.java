@@ -47,7 +47,7 @@ public class ObservableTest {
 		});
 		List<String> list = observable.toBlockingObservable().last();
 		assertEquals(newArrayList("a", "b", "c"), list);
-		em.closeAll();
+		em.closeFactory();
 		log.info("finished");
 	}
 }
