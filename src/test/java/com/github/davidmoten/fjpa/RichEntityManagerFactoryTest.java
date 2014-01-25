@@ -81,9 +81,8 @@ public class RichEntityManagerFactoryTest {
 			@Override
 			public List<String> run(RichEntityManager em) {
 				return em
-						.persist(new Document("a"))
-						.persist(new Document("b"))
-						.persist(new Document("c"))
+						.persist(new Document("a"), new Document("b"),
+								new Document("c"))
 						.createQuery("from Document order by id",
 								Document.class).fluent().transform(toId)
 						.toList();
