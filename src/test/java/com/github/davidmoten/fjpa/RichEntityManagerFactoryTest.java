@@ -2,6 +2,7 @@ package com.github.davidmoten.fjpa;
 
 import static com.github.davidmoten.fjpa.Document.toId;
 import static com.github.davidmoten.fjpa.EntityManagers.emf;
+import static com.google.common.base.Optional.of;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -16,11 +17,13 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
@@ -165,29 +168,32 @@ public class RichEntityManagerFactoryTest {
 	@Test
 	public void testRollbackWhenInactive() {
 		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.getTransaction()).andReturn(tx);
 		expect(tx.isActive()).andReturn(false);
-		EasyMock.replay(tx);
-		RichEntityManagerFactory.rollback(tx);
-		EasyMock.verify(tx);
+		EasyMock.replay(tx,em);
+		RichEntityManagerFactory.rollback(of(em));
+		EasyMock.verify(tx,em);
 	}
 
 	@Test
 	public void testRollbackWhenActive() {
 		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.rollback()).andReturn(em);
+		expect(em.getTransaction()).andReturn(tx);
 		expect(tx.isActive()).andReturn(true);
-		tx.rollback();
-		EasyMock.expectLastCall().once();
-		EasyMock.replay(tx);
-		RichEntityManagerFactory.rollback(tx);
-		EasyMock.verify(tx);
+		EasyMock.replay(tx,em);
+		RichEntityManagerFactory.rollback(of(em));
+		EasyMock.verify(tx,em);
 	}
 
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void testRollbackOnNullTransaction() {
 		RichEntityManagerFactory.rollback(null);
 	}
 
-	@Test
+	@Test(expected=NullPointerException.class)
 	public void testCloseEntityManager() {
 		RichEntityManagerFactory.close(null);
 	}
@@ -198,7 +204,7 @@ public class RichEntityManagerFactoryTest {
 		expect(em.isOpen()).andReturn(true);
 		expect(em.close()).andReturn(em).once();
 		EasyMock.replay(em);
-		RichEntityManagerFactory.close(em);
+		RichEntityManagerFactory.close(of(em));
 		EasyMock.verify(em);
 	}
 
@@ -207,7 +213,7 @@ public class RichEntityManagerFactoryTest {
 		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
 		expect(em.isOpen()).andReturn(false);
 		EasyMock.replay(em);
-		RichEntityManagerFactory.close(em);
+		RichEntityManagerFactory.close(of(em));
 		EasyMock.verify(em);
 	}
 

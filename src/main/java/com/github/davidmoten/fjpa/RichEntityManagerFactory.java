@@ -1,6 +1,7 @@
 package com.github.davidmoten.fjpa;
 
 import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Optional.of;
 import static com.google.common.base.Predicates.notNull;
 import static com.google.common.collect.FluentIterable.from;
 import static com.google.common.collect.Lists.newArrayList;
@@ -94,17 +95,14 @@ public class RichEntityManagerFactory {
 	 */
 	public <T> TaskOptionalResult<T> run(Task<T> task, boolean throwException,
 			boolean logException) {
-		RichEntityManager em = null;
-		EntityTransaction tx = null;
+		Optional<RichEntityManager> em = Optional.absent();
 		try {
-			em = createEntityManager();
-			tx = em.getTransaction();
-			tx.begin();
-			T t = task.run(em);
-			tx.commit();
+			em = of(createEntityManager().begin());
+			T t = task.run(em.get());
+			em.get().commit();
 			return new TaskOptionalResult<T>(fromNullable(t), this);
 		} catch (RuntimeException e) {
-			rollback(tx);
+			rollback(em);
 			if (logException)
 				log.error(e.getMessage(), e);
 			if (throwException)
@@ -117,15 +115,17 @@ public class RichEntityManagerFactory {
 	}
 
 	@VisibleForTesting
-	static void close(RichEntityManager em) {
-		if (em != null && em.isOpen())
-			em.close();
+	static void close(Optional<RichEntityManager> em) {
+		Preconditions.checkNotNull(em);
+		if (em.isPresent() && em.get().isOpen())
+			em.get().close();
 	}
 
 	@VisibleForTesting
-	static void rollback(EntityTransaction tx) {
-		if (tx != null && tx.isActive())
-			tx.rollback();
+	static void rollback(Optional<RichEntityManager> em) {
+		Preconditions.checkNotNull(em);
+		if (em.isPresent() && em.get().getTransaction().isActive())
+			em.get().rollback();
 	}
 
 	public <T> TaskResult<T> run(Task<T> task) {

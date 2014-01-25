@@ -40,6 +40,20 @@ public class RichEntityManager {
 		em.getTransaction().begin();
 		return this;
 	}
+	
+	public RichEntityManager rollback() {
+		em.getTransaction().rollback();
+		return this;
+	}
+	
+	public RichEntityManager commit() {
+		em.getTransaction().commit();
+		return this;
+	}
+	
+	public <T> T run(Task<T> task) {
+		return task.run(this);
+	}
 
 	public <T> T merge(T entity) {
 		return em.merge(entity);
@@ -236,11 +250,6 @@ public class RichEntityManager {
 
 	public Metamodel getMetamodel() {
 		return em.getMetamodel();
-	}
-
-	public RichEntityManager commit() {
-		em.getTransaction().commit();
-		return this;
 	}
 
 	public RichEntityManagerFactory emf() {
