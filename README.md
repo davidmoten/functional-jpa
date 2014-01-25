@@ -1,7 +1,8 @@
 functional-jpa
 ==============
 
-Functional style helpers for jpa and guava.
+Functional style helpers for jpa and guava. This project requires guava 
+and has an optional dependency on rx-java if you wish to use Observables (which are very cool!).
 
 Status: *pre-alpha*
 
