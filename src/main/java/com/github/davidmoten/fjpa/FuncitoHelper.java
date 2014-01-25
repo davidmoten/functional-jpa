@@ -10,6 +10,7 @@ public class FuncitoHelper {
 		return FuncitoGuava.callsTo(cls);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T, V> Function<T, V> f(V v) {
 		return (Function<T, V>) FuncitoGuava.functionFor(v);
 	}
