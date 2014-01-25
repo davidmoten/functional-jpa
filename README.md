@@ -151,7 +151,7 @@ I love it but its a bit verbose so I added a simple `FuncitoHelper` class to fun
 Function<Document,String> toId = f(c(Document.class).getId();
 ```
 
-Here's an example in anger:
+Here's an example using functional-jpa:
 ```
 import com.github.davidmoten.fjpa.EntityManagers;
 
