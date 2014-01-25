@@ -11,13 +11,13 @@ Query iterators
 *Rich* versions of `EntityManager.createQuery` method have fluent style and enable lazy iteration 
 of the result set of a query (which uses `setFirst` and `setMaxResults` for paging under the covers).
 
-To get a rich version of an EntityManagerFactory:
+To get a rich version of an `EntityManagerFactory`:
 
     EntityManagers.enrich(normalEmf); 
     
 Now to an example:
 
-Given this jpa class (note the use of Funcito to create the guava function for id):
+Given this jpa class (note the use of [Funcito](https://code.google.com/p/funcito/) to create the guava function for id):
 
 ```
 @Entity
@@ -72,7 +72,8 @@ List<String> list =
 
 Eliminating try-catch-final noise
 ---------------------------------------
-You can also get the `RichEntityManagerFactory` to perform all of the usual try-catch-final closing of resources and logging of errors using the `RichEntityManagerFactory` run method:
+You can also get the `RichEntityManagerFactory` to perform all of the usual try-catch-final 
+closing of resources and logging of errors using the `RichEntityManagerFactory` run method:
 
 ```
 RichEntityManagerFactory emf = EntityManagers.emf("test");
