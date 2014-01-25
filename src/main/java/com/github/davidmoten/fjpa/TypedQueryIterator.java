@@ -14,6 +14,8 @@ import javax.persistence.Parameter;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
+import rx.Observable;
+
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.AbstractIterator;
@@ -72,6 +74,10 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 			return FluentIterable.from(this);
 		}
 
+		public Observable<T> observable() {
+			return Observable.from( FluentIterable.from(this));
+		}
+		
 		public int executeUpdate() {
 			return query.executeUpdate();
 		}
@@ -216,7 +222,5 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 			query.setParameter(arg0, arg1, arg2);
 			return this;
 		}
-
 	}
-
 }

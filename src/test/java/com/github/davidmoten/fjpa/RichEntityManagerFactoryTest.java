@@ -20,7 +20,12 @@ import java.util.List;
 import javax.persistence.EntityTransaction;
 
 import org.easymock.EasyMock;
+import org.funcito.FuncitoRxJava;
 import org.junit.Test;
+
+import rx.Observable;
+import rx.util.functions.Action1;
+import rx.util.functions.Function;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
@@ -231,4 +236,5 @@ public class RichEntityManagerFactoryTest {
 			}
 		};
 	}
+
 }

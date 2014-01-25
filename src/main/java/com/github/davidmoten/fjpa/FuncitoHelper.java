@@ -14,5 +14,6 @@ public class FuncitoHelper {
 	public static <T, V> Function<T, V> f(V v) {
 		return (Function<T, V>) FuncitoGuava.functionFor(v);
 	}
+	
 
 }
