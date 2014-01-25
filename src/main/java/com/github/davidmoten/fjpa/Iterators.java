@@ -12,7 +12,7 @@ public final class Iterators {
 	}
 	
 	@VisibleForTesting
-	void instantiateForTesting() {
+	static void instantiateForTesting() {
 		new Iterators();
 	}
 	
@@ -24,8 +24,5 @@ public final class Iterators {
 		return new TypedQueryIterator.Builder<R>(query);
 	}
 
-	public static void instantiateForCoverage() {
-		
-	}
 
 }

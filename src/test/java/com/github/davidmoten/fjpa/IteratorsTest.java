@@ -6,6 +6,6 @@ public class IteratorsTest {
 
 	@Test
 	public void testForCoverage() {
-		Iterators.instantiateForCoverage();
+		Iterators.instantiateForTesting();
 	}
 }
