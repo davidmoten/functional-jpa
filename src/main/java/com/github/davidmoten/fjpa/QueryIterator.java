@@ -75,7 +75,7 @@ class QueryIterator<T> extends AbstractIterator<T> {
 		public FluentIterable<R> fluent() {
 			return FluentIterable.from(this);
 		}
-		
+
 		public int executeUpdate() {
 			return query.executeUpdate();
 		}
@@ -142,7 +142,7 @@ class QueryIterator<T> extends AbstractIterator<T> {
 
 		@SuppressWarnings("unchecked")
 		public FluentIterable<R> getResultList() {
-			return FluentIterable.from((List<R>)query.getResultList());
+			return FluentIterable.from((List<R>) query.getResultList());
 		}
 
 		@SuppressWarnings("unchecked")

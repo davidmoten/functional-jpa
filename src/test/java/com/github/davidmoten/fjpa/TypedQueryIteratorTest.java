@@ -47,8 +47,8 @@ public class TypedQueryIteratorTest {
 		insertDocuments(em);
 		TypedQuery<Document> q = em.createQuery(
 				"from Document where id > 'a' order by id", Document.class);
-		assertEquals(newArrayList("b", "c"), query(q).fluent()
-				.transform(toId).toList());
+		assertEquals(newArrayList("b", "c"), query(q).fluent().transform(toId)
+				.toList());
 		emf.close();
 	}
 
@@ -59,8 +59,7 @@ public class TypedQueryIteratorTest {
 		insertDocuments(em);
 		TypedQuery<Document> q = em.createQuery(
 				"from Document where id > 'c' order by id", Document.class);
-		assertEquals(newArrayList(), query(q).fluent().transform(toId)
-				.toList());
+		assertEquals(newArrayList(), query(q).fluent().transform(toId).toList());
 		emf.close();
 	}
 

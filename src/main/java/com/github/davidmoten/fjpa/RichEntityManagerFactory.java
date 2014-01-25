@@ -15,7 +15,6 @@ import java.util.Map;
 
 import javax.persistence.Cache;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
@@ -98,7 +97,7 @@ public class RichEntityManagerFactory {
 		Optional<RichEntityManager> em = Optional.absent();
 		try {
 			em = of(createEntityManager().begin());
-			T t = task.run(em.get());
+			T t = em.get().run(task);
 			em.get().commit();
 			return new TaskOptionalResult<T>(fromNullable(t), this);
 		} catch (RuntimeException e) {

@@ -1,6 +1,7 @@
 package com.github.davidmoten.fjpa;
 
-import static org.funcito.FuncitoGuava.*;
+import static org.funcito.FuncitoGuava.callsTo;
+import static org.funcito.FuncitoGuava.functionFor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -12,8 +12,8 @@ public class FuncitoHelperTest {
 
 	@Test
 	public void test() {
-		 Function<Document, String> toId = f(c(Document.class).getId());
-		 assertEquals("a",toId.apply(new Document("a")));
+		Function<Document, String> toId = f(c(Document.class).getId());
+		assertEquals("a", toId.apply(new Document("a")));
 	}
-	
+
 }

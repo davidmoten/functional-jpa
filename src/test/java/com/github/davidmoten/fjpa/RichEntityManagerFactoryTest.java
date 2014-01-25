@@ -17,13 +17,11 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
@@ -171,9 +169,9 @@ public class RichEntityManagerFactoryTest {
 		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
 		expect(em.getTransaction()).andReturn(tx);
 		expect(tx.isActive()).andReturn(false);
-		EasyMock.replay(tx,em);
+		EasyMock.replay(tx, em);
 		RichEntityManagerFactory.rollback(of(em));
-		EasyMock.verify(tx,em);
+		EasyMock.verify(tx, em);
 	}
 
 	@Test
@@ -183,17 +181,17 @@ public class RichEntityManagerFactoryTest {
 		expect(em.rollback()).andReturn(em);
 		expect(em.getTransaction()).andReturn(tx);
 		expect(tx.isActive()).andReturn(true);
-		EasyMock.replay(tx,em);
+		EasyMock.replay(tx, em);
 		RichEntityManagerFactory.rollback(of(em));
-		EasyMock.verify(tx,em);
+		EasyMock.verify(tx, em);
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void testRollbackOnNullTransaction() {
 		RichEntityManagerFactory.rollback(null);
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test(expected = NullPointerException.class)
 	public void testCloseEntityManager() {
 		RichEntityManagerFactory.close(null);
 	}

@@ -39,7 +39,7 @@ public class QueryIteratorTest {
 				.transform(toId).toList());
 		emf.close();
 	}
-	
+
 	@Test
 	public void testIteratorReturnsPartialListOfDocumentsUsingFuncitoHelper() {
 		EntityManagerFactory emf = emf();
@@ -50,7 +50,6 @@ public class QueryIteratorTest {
 				.transform(f(c(Document.class).getId())).toList());
 		emf.close();
 	}
-	
 
 	@Test
 	public void testIteratorReturnsNoDocuments() {
