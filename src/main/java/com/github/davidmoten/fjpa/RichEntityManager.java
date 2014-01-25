@@ -30,8 +30,9 @@ public class RichEntityManager {
 		return em;
 	}
 
-	public RichEntityManager persist(Object entity) {
-		em.persist(entity);
+	public RichEntityManager persist(Object... entities) {
+		for (Object entity : entities)
+			em.persist(entity);
 		return this;
 	}
 

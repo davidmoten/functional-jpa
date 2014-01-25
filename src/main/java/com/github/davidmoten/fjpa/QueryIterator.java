@@ -58,6 +58,10 @@ import com.google.common.collect.FluentIterable;
 		public Iterator<R> iterator() {
 			return new QueryIterator<R>(query, pageSize,cls);
 		}
+		
+		public Query get() {
+			return query;
+		}
 
 		public FluentIterable<R> fluent() {
 			return FluentIterable.from(this);
