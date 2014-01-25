@@ -63,15 +63,15 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 		public Iterator<T> iterator() {
 			return new TypedQueryIterator<T>(query, pageSize);
 		}
-		
+
 		public TypedQuery<T> get() {
 			return query;
 		}
-		
+
 		public FluentIterable<T> fluent() {
 			return FluentIterable.from(this);
 		}
-		
+
 		public int executeUpdate() {
 			return query.executeUpdate();
 		}
@@ -145,13 +145,13 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 		}
 
 		public Builder<T> firstResult(int arg0) {
-			 query.setFirstResult(0);
-			 return this;
+			query.setFirstResult(0);
+			return this;
 		}
 
 		public Builder<T> flushMode(FlushModeType arg0) {
-			 query.setFlushMode(arg0);
-			 return this;
+			query.setFlushMode(arg0);
+			return this;
 		}
 
 		public Builder<T> hint(String arg0, Object arg1) {
@@ -169,8 +169,8 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 			return this;
 		}
 
-		public  Builder<T> parameter(Parameter<T> arg0, T arg1) {
-			 query.setParameter(arg0, arg1);
+		public Builder<T> parameter(Parameter<T> arg0, T arg1) {
+			query.setParameter(arg0, arg1);
 			return this;
 		}
 
@@ -198,22 +198,22 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 
 		public Builder<T> parameter(String arg0, Calendar arg1,
 				TemporalType arg2) {
-			query.setParameter(arg0,arg1,arg2);
+			query.setParameter(arg0, arg1, arg2);
 			return this;
 		}
 
 		public Builder<T> parameter(String arg0, Date arg1, TemporalType arg2) {
-			query.setParameter(arg0, arg1,arg2);
+			query.setParameter(arg0, arg1, arg2);
 			return this;
 		}
 
 		public Builder<T> parameter(int arg0, Calendar arg1, TemporalType arg2) {
-			query.setParameter(arg0, arg1,arg2);
+			query.setParameter(arg0, arg1, arg2);
 			return this;
 		}
 
 		public Builder<T> parameter(int arg0, Date arg1, TemporalType arg2) {
-			query.setParameter(arg0, arg1,arg2);
+			query.setParameter(arg0, arg1, arg2);
 			return this;
 		}
 

@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.FluentIterable;
 
- class QueryIterator<T> extends AbstractIterator<T> {
+class QueryIterator<T> extends AbstractIterator<T> {
 
 	private final Query query;
 	private final int pageSize;
@@ -56,9 +56,9 @@ import com.google.common.collect.FluentIterable;
 
 		@Override
 		public Iterator<R> iterator() {
-			return new QueryIterator<R>(query, pageSize,cls);
+			return new QueryIterator<R>(query, pageSize, cls);
 		}
-		
+
 		public Query get() {
 			return query;
 		}

@@ -28,6 +28,6 @@ public class EntityManagersTest {
 	@Test
 	public void testEnrichEntityManagerWithProperties() {
 		Map<String, Object> map = Maps.newHashMap();
-		assertNotNull(EntityManagers.emf("test",map));
+		assertNotNull(EntityManagers.emf("test", map));
 	}
 }

@@ -12,12 +12,11 @@ public final class EntityManagers {
 	private EntityManagers() {
 		// prevent instantiation
 	}
-	
+
 	@VisibleForTesting
 	static void instantiateForCoverage() {
 		new EntityManagers();
 	}
-	
 
 	public static RichEntityManagerFactory enrich(EntityManagerFactory emf) {
 		return new RichEntityManagerFactory(emf);

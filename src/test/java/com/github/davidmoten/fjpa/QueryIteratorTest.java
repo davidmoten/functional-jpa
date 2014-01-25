@@ -70,14 +70,14 @@ public class QueryIteratorTest {
 				.pageSize(1).fluent().transform(toId()).toList());
 		emf.close();
 	}
-	
+
 	@Test
 	public void testGetOriginalQuery() {
 		EntityManagerFactory emf = emf();
 		EntityManager em = emf.createEntityManager();
 		insertDocuments(em);
 		Query q = em.createQuery("from Document order by id");
-		assertTrue(query(q,Document.class).get() instanceof Query);
+		assertTrue(query(q, Document.class).get() instanceof Query);
 		emf.close();
 	}
 

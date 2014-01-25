@@ -5,7 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class TestingUtil {
-	public static  void insertDocuments(EntityManager em) {
+	public static void insertDocuments(EntityManager em) {
 		em.getTransaction().begin();
 		em.persist(new Document("a"));
 		em.persist(new Document("b"));

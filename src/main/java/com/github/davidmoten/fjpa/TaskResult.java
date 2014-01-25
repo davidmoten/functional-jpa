@@ -18,7 +18,7 @@ public class TaskResult<T> {
 		processor.process(result());
 		return this;
 	}
-	
+
 	public RichEntityManagerFactory emf() {
 		return emf;
 	}
