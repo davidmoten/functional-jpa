@@ -7,9 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.funcito.Funcito;
-import org.funcito.FuncitoGuava;
-
 import com.google.common.base.Function;
 
 @Entity
@@ -29,10 +26,6 @@ public class Document {
 	@Column
 	public String status;
 
-	private static Function<Document, String> toId = functionFor(callsTo(Document.class).getId());
-
-	public static Function<Document, String> toId() {
-		return toId;
-	}
+	public static Function<Document, String> toId = functionFor(callsTo(Document.class).getId());
 
 }

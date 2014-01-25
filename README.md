@@ -17,7 +17,7 @@ To get a rich version of an EntityManagerFactory:
     
 Now to an example:
 
-Given this jpa class:
+Given this jpa class (note the use of Funcito to create the guava function for id):
 
 ```
 @Entity
@@ -28,18 +28,16 @@ public class Document {
 	}
 
 	@Id
-	public String id;
+	private String id;
 
-	private static Function<Document, String> toId = new Function<Document, String>() {
-		@Override
-		public String apply(Document input) {
-			return input.id;
-		}
-	};
-
-	public static Function<Document, String> toId() {
-		return toId;
+	public String getId() {
+		return id;
 	}
+
+	@Column
+	public String status;
+
+	public static Function<Document, String> toId = functionFor(callsTo(Document.class).getId());
 
 }
 ```
@@ -57,7 +55,7 @@ List<String> list =
        .createQuery("from Document order by id",String.class) 
 	   .pageSize(2000)     //default page size is 100
 	   .fluent()           //as FluentIterable
-	   .transform(toId())  //get id (lazily)
+	   .transform(toId)  //get id (lazily)
 	   .toList();          //force evaluation to list
 ```
 
@@ -89,7 +87,7 @@ List<String> list =
 						.persist(new Document("c"))
 						.createQuery("from Document order by id",
 								Document.class).fluent()
-						.transform(toId()).toList();
+						.transform(toId).toList();
 			}
 		});
 assertEquals(newArrayList("a", "b", "c"), list);
@@ -110,7 +108,7 @@ emf("test")
 				.createQuery("from Document order by id",
 						Document.class)
 				.fluent()
-				.transform(toId())
+				.transform(toId)
 				.toList();
 	}
 }).process(new Processor<List<String>>() {
@@ -131,7 +129,7 @@ emf("test")
 				.createQuery("from Document order by id",
 						Document.class)
 				.fluent()
-				.transform(toId())
+				.transform(toId)
 				.toList())
    .process(list ->
 		assertEquals(newArrayList("a", "b", "c"), list))

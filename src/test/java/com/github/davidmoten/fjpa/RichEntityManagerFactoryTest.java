@@ -32,7 +32,7 @@ public class RichEntityManagerFactoryTest {
 		ImmutableList<String> list = em.begin().persist(new Document("a"))
 				.persist(new Document("b")).persist(new Document("c")).commit()
 				.createQuery("from Document order by id", Document.class)
-				.fluent().transform(toId()).toList();
+				.fluent().transform(toId).toList();
 		assertEquals(newArrayList("a", "b", "c"), list);
 		em.closeAll();
 	}
@@ -48,7 +48,7 @@ public class RichEntityManagerFactoryTest {
 						.persist(new Document("b"))
 						.persist(new Document("c"))
 						.createQuery("from Document order by id",
-								Document.class).fluent().transform(toId())
+								Document.class).fluent().transform(toId)
 						.toList();
 				assertEquals(newArrayList("a", "b", "c"), list);
 			}
@@ -66,7 +66,7 @@ public class RichEntityManagerFactoryTest {
 						.persist(new Document("b"))
 						.persist(new Document("c"))
 						.createQuery("from Document order by id",
-								Document.class).fluent().transform(toId())
+								Document.class).fluent().transform(toId)
 						.toList();
 			}
 		}).result();
@@ -85,7 +85,7 @@ public class RichEntityManagerFactoryTest {
 						.persist(new Document("b"))
 						.persist(new Document("c"))
 						.createQuery("from Document order by id",
-								Document.class).fluent().transform(toId())
+								Document.class).fluent().transform(toId)
 						.toList();
 			}
 		}).process(new Processor<List<String>>() {

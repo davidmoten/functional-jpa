@@ -23,7 +23,7 @@ public class TypedQueryIteratorTest {
 		TypedQuery<Document> q = em.createQuery("from Document order by id",
 				Document.class);
 		assertEquals(newArrayList("a", "b", "c"),
-				query(q).fluent().transform(toId()).toList());
+				query(q).fluent().transform(toId).toList());
 		emf.close();
 	}
 
@@ -36,7 +36,7 @@ public class TypedQueryIteratorTest {
 				"from Document where id <> :exclude order by id",
 				Document.class);
 		assertEquals(newArrayList("a", "c"), query(q).parameter("exclude", "b")
-				.fluent().transform(toId()).toList());
+				.fluent().transform(toId).toList());
 		emf.close();
 	}
 
@@ -48,7 +48,7 @@ public class TypedQueryIteratorTest {
 		TypedQuery<Document> q = em.createQuery(
 				"from Document where id > 'a' order by id", Document.class);
 		assertEquals(newArrayList("b", "c"), query(q).fluent()
-				.transform(toId()).toList());
+				.transform(toId).toList());
 		emf.close();
 	}
 
@@ -59,7 +59,7 @@ public class TypedQueryIteratorTest {
 		insertDocuments(em);
 		TypedQuery<Document> q = em.createQuery(
 				"from Document where id > 'c' order by id", Document.class);
-		assertEquals(newArrayList(), query(q).fluent().transform(toId())
+		assertEquals(newArrayList(), query(q).fluent().transform(toId)
 				.toList());
 		emf.close();
 	}
@@ -72,7 +72,7 @@ public class TypedQueryIteratorTest {
 		TypedQuery<Document> q = em.createQuery("from Document order by id",
 				Document.class);
 		assertEquals(newArrayList("a", "b", "c"), query(q).pageSize(2).fluent()
-				.transform(toId()).toList());
+				.transform(toId).toList());
 		emf.close();
 	}
 
@@ -84,7 +84,7 @@ public class TypedQueryIteratorTest {
 		TypedQuery<Document> q = em.createQuery("from Document order by id",
 				Document.class);
 		assertEquals(newArrayList("a", "b", "c"), query(q).pageSize(1).fluent()
-				.transform(toId()).toList());
+				.transform(toId).toList());
 		emf.close();
 	}
 

@@ -23,7 +23,7 @@ public class QueryIteratorTest {
 		insertDocuments(em);
 		Query q = em.createQuery("from Document order by id");
 		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.fluent().transform(toId()).toList());
+				.fluent().transform(toId).toList());
 		emf.close();
 	}
 
@@ -34,7 +34,7 @@ public class QueryIteratorTest {
 		insertDocuments(em);
 		Query q = em.createQuery("from Document where id > 'a' order by id");
 		assertEquals(newArrayList("b", "c"), query(q, Document.class).fluent()
-				.transform(toId()).toList());
+				.transform(toId).toList());
 		emf.close();
 	}
 
@@ -45,7 +45,7 @@ public class QueryIteratorTest {
 		insertDocuments(em);
 		Query q = em.createQuery("from Document where id > 'c' order by id");
 		assertEquals(newArrayList(), query(q, Document.class).fluent()
-				.transform(toId()).toList());
+				.transform(toId).toList());
 		emf.close();
 	}
 
@@ -56,7 +56,7 @@ public class QueryIteratorTest {
 		insertDocuments(em);
 		Query q = em.createQuery("from Document order by id");
 		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.pageSize(2).fluent().transform(toId()).toList());
+				.pageSize(2).fluent().transform(toId).toList());
 		emf.close();
 	}
 
@@ -67,7 +67,7 @@ public class QueryIteratorTest {
 		insertDocuments(em);
 		Query q = em.createQuery("from Document order by id");
 		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.pageSize(1).fluent().transform(toId()).toList());
+				.pageSize(1).fluent().transform(toId).toList());
 		emf.close();
 	}
 

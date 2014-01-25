@@ -26,7 +26,7 @@ public class IteratorsFromDifferentPackageTest {
 		TypedQuery<Document> q = em.createQuery("from Document order by id",
 				Document.class);
 		assertEquals(newArrayList("a", "b", "c"),
-				query(q).fluent().transform(toId()).toList());
+				query(q).fluent().transform(toId).toList());
 		emf.close();
 	}
 
@@ -37,7 +37,7 @@ public class IteratorsFromDifferentPackageTest {
 		insertDocuments(em);
 		Query q = em.createQuery("from Document order by id");
 		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.fluent().transform(toId()).toList());
+				.fluent().transform(toId).toList());
 		emf.close();
 	}
 
