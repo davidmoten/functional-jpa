@@ -31,6 +31,7 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 	private final int pageSize;
 
 	private TypedQueryIterator(TypedQuery<T> query, int pageSize) {
+		System.out.println("typed query iterator");
 		Preconditions.checkNotNull(query);
 		this.query = query;
 		this.pageSize = pageSize;
@@ -76,7 +77,7 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 		}
 
 		public Observable<T> observable() {
-			return Observable.from( FluentIterable.from(this));
+			return Observable.from(FluentIterable.from(this));
 		}
 		
 		public int executeUpdate() {

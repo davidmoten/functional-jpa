@@ -33,7 +33,7 @@ public class ObservableTest {
 			@Override
 			public void onCompleted() {
 				System.out.println("onCompleted");
-//				em.closeFactory();
+				em.closeFactory();
 			}
 
 			@Override
@@ -44,12 +44,24 @@ public class ObservableTest {
 
 			@Override
 			public void onNext(List<String> list) {
-				System.out.println(list);
+				assertEquals(newArrayList("a", "b", "c"), list);
 			}
 		});
+		log.info("finished 1");
+	}
+	
+	@Test
+	public void testObservableBlocking() {
+		final RichEntityManager em = emf("test").em();
+		Observable<List<String>> observable = em.begin()
+				.persist(new Document("a")).persist(new Document("b"))
+				.persist(new Document("c")).commit()
+				.createQuery("from Document order by id", Document.class)
+				.observable().map(func1For(callsTo(Document.class).getId()))
+				.toList();
 		List<String> list = observable.toBlockingObservable().single();
 		assertEquals(newArrayList("a", "b", "c"), list);
 		em.closeFactory();
-		log.info("finished");
+		log.info("finished 2");
 	}
 }
