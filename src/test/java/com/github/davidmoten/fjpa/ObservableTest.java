@@ -45,6 +45,7 @@ public class ObservableTest {
 			@Override
 			public void onNext(List<String> list) {
 				assertEquals(newArrayList("a", "b", "c"), list);
+				System.out.println("asserted ok ");
 			}
 		});
 		log.info("finished 1");
@@ -53,14 +54,13 @@ public class ObservableTest {
 	@Test
 	public void testObservableBlocking() {
 		final RichEntityManager em = emf("test").em();
-		Observable<List<String>> observable = em.begin()
+		List<String> list = em.begin()
 				.persist(new Document("a")).persist(new Document("b"))
 				.persist(new Document("c")).commit()
 				.createQuery("from Document order by id", Document.class)
 				.observable().map(func1For(callsTo(Document.class).getId()))
-				.toList();
-		List<String> list = observable.toBlockingObservable().single();
-		assertEquals(newArrayList("a", "b", "c"), list);
+				.toList().toBlockingObservable().single();
+		assertEquals(newArrayList("a", "b", "c"), list); 
 		em.closeFactory();
 		log.info("finished 2");
 	}
