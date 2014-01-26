@@ -11,9 +11,9 @@ Features
 * method chaining for EntityManager, EntityManagerFactory 
 * improved Query builder
 * lazy iteration and paging of result sets (great for large result sets)
-* can return result set as Guava `FluentIterable` 
-* can return result set as *rx-java* `Observable`
-* `run` in `RichEntityManager` handles try catch final noise for closing resources and logging (slf4j)
+* can return result set as Guava FluentIterable 
+* can return result set as *rx-java* Observable
+* RichEntityManager.run handles try catch final noise for closing resources and logging (slf4j)
 * Funcito helper methods
 
 Query iterators
