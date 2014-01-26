@@ -6,6 +6,17 @@ and has an optional dependency on rx-java if you wish to use Observables (which 
 
 Status: *pre-alpha*
 
+Features
+-------------------
+* method chaining for EntityManager, EntityManagerFactory 
+* improved Query builder
+* lazy iteration and paging of result sets (great for large result sets)
+* query building matches most common builder pattern convention (no `setThing(t)` methods but rather `thing(t)`)  
+* can return result set as Guava `FluentIterable` 
+* can return result set as *rx-java* `Observable`
+* `run` in `RichEntityManager` handles try catch final noise for closing resources and logging (slf4j)
+* Funcito helper methods
+
 Query iterators
 ------------------
 

@@ -21,7 +21,7 @@ public class ObservableTest {
 			.getLogger(RichEntityManagerFactory.class);
 
 	@Test
-	public void testObservable() {
+	public void testObservableRunningAsync() {
 		final RichEntityManager em = emf("test").em();
 		Observable<List<String>> observable = em.begin()
 				.persist(new Document("a")).persist(new Document("b"))
