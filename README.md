@@ -24,7 +24,9 @@ of the result set of a query (which uses `setFirst` and `setMaxResults` for pagi
 
 To get a rich version of an `EntityManagerFactory`:
 
-    EntityManagers.enrich(normalEmf); 
+```java
+    EntityManagers.enrich(normalEmf);
+ ``` 
     
 Now to an example:
 
