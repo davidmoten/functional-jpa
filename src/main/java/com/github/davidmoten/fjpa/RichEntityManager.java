@@ -30,14 +30,29 @@ public class RichEntityManager {
 		return em;
 	}
 
-	public RichEntityManager persist(Object entity) {
-		em.persist(entity);
+	public RichEntityManager persist(Object... entities) {
+		for (Object entity : entities)
+			em.persist(entity);
 		return this;
 	}
 
 	public RichEntityManager begin() {
 		em.getTransaction().begin();
 		return this;
+	}
+
+	public RichEntityManager rollback() {
+		em.getTransaction().rollback();
+		return this;
+	}
+
+	public RichEntityManager commit() {
+		em.getTransaction().commit();
+		return this;
+	}
+
+	public <T> T run(Task<T> task) {
+		return task.run(this);
 	}
 
 	public <T> T merge(T entity) {
@@ -211,9 +226,11 @@ public class RichEntityManager {
 		return this;
 	}
 
-	public RichEntityManager closeAll() {
-		em.close();
-		em.getEntityManagerFactory().close();
+	public RichEntityManager closeFactory() {
+		if (em.isOpen())
+			em.close();
+		if (em.getEntityManagerFactory().isOpen())
+			em.getEntityManagerFactory().close();
 		return this;
 	}
 
@@ -235,11 +252,6 @@ public class RichEntityManager {
 
 	public Metamodel getMetamodel() {
 		return em.getMetamodel();
-	}
-
-	public RichEntityManager commit() {
-		em.getTransaction().commit();
-		return this;
 	}
 
 	public RichEntityManagerFactory emf() {

@@ -6,7 +6,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class EntityManagers {
+import com.google.common.annotations.VisibleForTesting;
+
+public final class EntityManagers {
+	private EntityManagers() {
+		// prevent instantiation
+	}
+
+	@VisibleForTesting
+	static void instantiateForCoverage() {
+		new EntityManagers();
+	}
+
 	public static RichEntityManagerFactory enrich(EntityManagerFactory emf) {
 		return new RichEntityManagerFactory(emf);
 	}

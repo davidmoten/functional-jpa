@@ -1,22 +1,27 @@
 package com.github.davidmoten.fjpa;
 
 import static com.google.common.base.Optional.fromNullable;
+import static com.google.common.base.Optional.of;
+import static com.google.common.base.Predicates.notNull;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Cache;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
 
 import org.slf4j.LoggerFactory;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 
@@ -89,18 +94,14 @@ public class RichEntityManagerFactory {
 	 */
 	public <T> TaskOptionalResult<T> run(Task<T> task, boolean throwException,
 			boolean logException) {
-		RichEntityManager em = null;
-		EntityTransaction tx = null;
+		Optional<RichEntityManager> em = Optional.absent();
 		try {
-			em = createEntityManager();
-			tx = em.getTransaction();
-			tx.begin();
-			T t = task.run(em);
-			tx.commit();
+			em = of(createEntityManager().begin());
+			T t = em.get().run(task);
+			em.get().commit();
 			return new TaskOptionalResult<T>(fromNullable(t), this);
 		} catch (RuntimeException e) {
-			if (tx != null && tx.isActive())
-				tx.rollback();
+			rollback(em);
 			if (logException)
 				log.error(e.getMessage(), e);
 			if (throwException)
@@ -108,9 +109,22 @@ public class RichEntityManagerFactory {
 			else
 				return new TaskOptionalResult<T>(Optional.<T> absent(), this);
 		} finally {
-			if (em != null && em.isOpen())
-				em.close();
+			close(em);
 		}
+	}
+
+	@VisibleForTesting
+	static void close(Optional<RichEntityManager> em) {
+		Preconditions.checkNotNull(em);
+		if (em.isPresent() && em.get().isOpen())
+			em.get().close();
+	}
+
+	@VisibleForTesting
+	static void rollback(Optional<RichEntityManager> em) {
+		Preconditions.checkNotNull(em);
+		if (em.isPresent() && em.get().getTransaction().isActive())
+			em.get().rollback();
 	}
 
 	public <T> TaskResult<T> run(Task<T> task) {
@@ -142,8 +156,36 @@ public class RichEntityManagerFactory {
 	}
 
 	public RichEntityManagerFactory runScript(InputStream is) {
-		final StringBuffer s = new StringBuffer();
+		final StringBuffer s = readString(is);
+		String[] items = s.toString().split(";");
+		List<String> commands = from(newArrayList(items)).filter(notNull())
+				.toList();
+		run(commands);
+		return this;
+	}
+
+	public void run(final List<String> commands) {
+		run(new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				for (String command : commands) {
+					log.info(command.trim());
+					if (command.trim().length() > 0)
+						em.get().createNativeQuery(command.trim())
+								.executeUpdate();
+				}
+			}
+		});
+	}
+
+	private static StringBuffer readString(InputStream is) {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		return readString(br);
+	}
+
+	@VisibleForTesting
+	static StringBuffer readString(BufferedReader br) {
+		final StringBuffer s = new StringBuffer();
 		String line;
 		try {
 			while ((line = br.readLine()) != null) {
@@ -155,21 +197,6 @@ public class RichEntityManagerFactory {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-
-		run(new TaskVoid() {
-			@Override
-			public void run(RichEntityManager em) {
-				String[] commands = s.toString().split(";");
-				for (String command : commands) {
-					if (command != null) {
-						log.info(command.trim());
-						if (command.trim().length() > 0)
-							em.get().createNativeQuery(command.trim())
-									.executeUpdate();
-					}
-				}
-			}
-		});
-		return this;
+		return s;
 	}
 }

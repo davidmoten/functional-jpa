@@ -2,17 +2,33 @@ package com.github.davidmoten.fjpa;
 
 import static com.github.davidmoten.fjpa.Document.toId;
 import static com.github.davidmoten.fjpa.EntityManagers.emf;
+import static com.google.common.base.Optional.of;
 import static com.google.common.collect.Lists.newArrayList;
+import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.List;
 
+import javax.persistence.EntityTransaction;
+
+import org.easymock.EasyMock;
+import org.funcito.FuncitoRxJava;
 import org.junit.Test;
 
+import rx.Observable;
+import rx.util.functions.Action1;
+import rx.util.functions.Function;
+
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 public class RichEntityManagerFactoryTest {
 
@@ -22,9 +38,9 @@ public class RichEntityManagerFactoryTest {
 		ImmutableList<String> list = em.begin().persist(new Document("a"))
 				.persist(new Document("b")).persist(new Document("c")).commit()
 				.createQuery("from Document order by id", Document.class)
-				.fluent().transform(toId()).toList();
+				.fluent().transform(toId).toList();
 		assertEquals(newArrayList("a", "b", "c"), list);
-		em.closeAll();
+		em.closeFactory();
 	}
 
 	@Test
@@ -38,7 +54,7 @@ public class RichEntityManagerFactoryTest {
 						.persist(new Document("b"))
 						.persist(new Document("c"))
 						.createQuery("from Document order by id",
-								Document.class).fluent().transform(toId())
+								Document.class).fluent().transform(toId)
 						.toList();
 				assertEquals(newArrayList("a", "b", "c"), list);
 			}
@@ -56,7 +72,7 @@ public class RichEntityManagerFactoryTest {
 						.persist(new Document("b"))
 						.persist(new Document("c"))
 						.createQuery("from Document order by id",
-								Document.class).fluent().transform(toId())
+								Document.class).fluent().transform(toId)
 						.toList();
 			}
 		}).result();
@@ -71,11 +87,10 @@ public class RichEntityManagerFactoryTest {
 			@Override
 			public List<String> run(RichEntityManager em) {
 				return em
-						.persist(new Document("a"))
-						.persist(new Document("b"))
-						.persist(new Document("c"))
+						.persist(new Document("a"), new Document("b"),
+								new Document("c"))
 						.createQuery("from Document order by id",
-								Document.class).fluent().transform(toId())
+								Document.class).fluent().transform(toId)
 						.toList();
 			}
 		}).process(new Processor<List<String>>() {
@@ -85,17 +100,141 @@ public class RichEntityManagerFactoryTest {
 			}
 		}).emf().close();
 	}
-	
+
 	@Test
 	public void testRunScript() {
 		StringWriter commands = new StringWriter();
 		commands.write("insert into document(id) values('a');\n");
 		commands.write("insert into document(id) values('b');\n");
-		InputStream is = new ByteArrayInputStream(commands.toString().getBytes());
+		InputStream is = new ByteArrayInputStream(commands.toString()
+				.getBytes());
 		RichEntityManagerFactory emf = emf("test");
 		long count = emf.runScript(is).em().count(Document.class);
 		emf.close();
-		assertEquals(2,count);
+		assertEquals(2, count);
+	}
+
+	@Test
+	public void testRunScriptWhneBlankCommand() {
+		StringWriter commands = new StringWriter();
+		commands.write("insert into document(id) values('a');\n");
+		commands.write("      ;\n");
+		commands.write("insert into document(id) values('b');\n");
+		InputStream is = new ByteArrayInputStream(commands.toString()
+				.getBytes());
+		RichEntityManagerFactory emf = emf("test");
+		long count = emf.runScript(is).em().count(Document.class);
+		emf.close();
+		assertEquals(2, count);
+	}
+
+	@Test
+	public void testCreateEntityManager() {
+		emf("test").createEntityManager(Maps.<String, Object> newHashMap())
+				.begin().persist(new Document("a")).commit().close();
+	}
+
+	@Test
+	public void testCreateCriteriaBuilder() {
+		RichEntityManagerFactory emf = emf("test");
+		assertNotNull(emf.getCriteriaBuilder());
+		assertNotNull(emf.getMetamodel());
+		assertTrue(emf.isOpen());
+		assertNotNull(emf.getProperties());
+		assertNotNull(emf.getCache());
+		assertNotNull(emf.getPersistenceUnitUtil());
+		assertNotNull(emf.getProperties());
+		emf.close();
+		assertFalse(emf.isOpen());
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testTaskThrowsException() {
+		emf("test").run(taskThrowingException());
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testTaskThrowsExceptionNoLog() {
+		emf("test").run(taskThrowingException(), true, false);
+	}
+
+	@Test
+	public void testTaskThrowsExceptionNoLogNoThrow() {
+		emf("test").run(taskThrowingException(), false, false);
+	}
+
+	@Test
+	public void testTaskThrowsExceptionNoThrow() {
+		emf("test").run(taskThrowingException(), false, true);
+	}
+
+	@Test
+	public void testRollbackWhenInactive() {
+		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.getTransaction()).andReturn(tx);
+		expect(tx.isActive()).andReturn(false);
+		EasyMock.replay(tx, em);
+		RichEntityManagerFactory.rollback(of(em));
+		EasyMock.verify(tx, em);
+	}
+
+	@Test
+	public void testRollbackWhenActive() {
+		EntityTransaction tx = EasyMock.createMock(EntityTransaction.class);
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.rollback()).andReturn(em);
+		expect(em.getTransaction()).andReturn(tx);
+		expect(tx.isActive()).andReturn(true);
+		EasyMock.replay(tx, em);
+		RichEntityManagerFactory.rollback(of(em));
+		EasyMock.verify(tx, em);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testRollbackOnNullTransaction() {
+		RichEntityManagerFactory.rollback(null);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testCloseEntityManager() {
+		RichEntityManagerFactory.close(null);
+	}
+
+	@Test
+	public void testCloseEntityManagerWhenOpen() {
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.isOpen()).andReturn(true);
+		expect(em.close()).andReturn(em).once();
+		EasyMock.replay(em);
+		RichEntityManagerFactory.close(of(em));
+		EasyMock.verify(em);
+	}
+
+	@Test
+	public void testCloseEntityManagerWhenClosed() {
+		RichEntityManager em = EasyMock.createMock(RichEntityManager.class);
+		expect(em.isOpen()).andReturn(false);
+		EasyMock.replay(em);
+		RichEntityManagerFactory.close(of(em));
+		EasyMock.verify(em);
+	}
+
+	@Test(expected = RuntimeException.class)
+	public void testReadStringWhenExceptionThrown() throws IOException {
+		BufferedReader br = EasyMock.createMock(BufferedReader.class);
+		EasyMock.expect(br.readLine()).andThrow(new IOException(""));
+		EasyMock.replay(br);
+		RichEntityManagerFactory.readString(br);
+	}
+
+	private TaskVoid taskThrowingException() {
+		return new TaskVoid() {
+			@Override
+			public void run(RichEntityManager em) {
+				throw new RuntimeException("test exception");
+			}
+		};
 	}
 
 }
