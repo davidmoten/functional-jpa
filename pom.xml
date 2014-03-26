@@ -58,9 +58,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:davidmoten/logan.git</connection>
-    <developerConnection>scm:git:git@github.com:davidmoten/logan.git</developerConnection>
-    <url>scm:git:git@github.com:davidmoten/logan.git</url>
+    <connection>scm:git:git@github.com:davidmoten/functional-jpa.git</connection>
+    <developerConnection>scm:git:git@github.com:davidmoten/functional-jpa.git</developerConnection>
+    <url>scm:git:git@github.com:davidmoten/functional-jpa.git</url>
   </scm>
 
   <dependencies>
