@@ -77,7 +77,7 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
         }
 
         public Observable<T> observable() {
-            return Observable.from(FluentIterable.from(this));
+            return Observable.from(fluent());
         }
 
         public int executeUpdate() {
