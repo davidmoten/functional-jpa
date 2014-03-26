@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.persistence.EntityTransaction;
@@ -26,6 +27,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 public class RichEntityManagerFactoryTest {
+
+    private static final Charset UTF8 = Charset.forName("UTF-8");
 
     @Test
     public void testRichEmf() {
@@ -94,7 +97,7 @@ public class RichEntityManagerFactoryTest {
         commands.write("insert into document(id) values('b');\n");
         InputStream is = new ByteArrayInputStream(commands.toString().getBytes());
         RichEntityManagerFactory emf = emf("test");
-        long count = emf.runScript(is).em().count(Document.class);
+        long count = emf.runScript(is, UTF8).em().count(Document.class);
         emf.close();
         assertEquals(2, count);
     }
@@ -107,7 +110,7 @@ public class RichEntityManagerFactoryTest {
         commands.write("insert into document(id) values('b');\n");
         InputStream is = new ByteArrayInputStream(commands.toString().getBytes());
         RichEntityManagerFactory emf = emf("test");
-        long count = emf.runScript(is).em().count(Document.class);
+        long count = emf.runScript(is, UTF8).em().count(Document.class);
         emf.close();
         assertEquals(2, count);
     }
