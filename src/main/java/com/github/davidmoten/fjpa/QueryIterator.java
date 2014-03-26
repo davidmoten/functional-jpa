@@ -22,205 +22,202 @@ import com.google.common.collect.FluentIterable;
 
 class QueryIterator<T> extends AbstractIterator<T> {
 
-	private final Query query;
-	private final int pageSize;
+    private final Query query;
+    private final int pageSize;
 
-	// mutable state
-	private Optional<Iterator<T>> it = Optional.absent();
-	private int position = 0;
+    // mutable state
+    private Optional<Iterator<T>> it = Optional.absent();
+    private int position = 0;
 
-	private QueryIterator(Query query, int pageSize, Class<T> cls) {
-		Preconditions.checkNotNull(query);
-		this.query = query;
-		this.pageSize = pageSize;
-	}
+    private QueryIterator(Query query, int pageSize, Class<T> cls) {
+        Preconditions.checkNotNull(query);
+        this.query = query;
+        this.pageSize = pageSize;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	protected T computeNext() {
-		if (!it.isPresent() || !it.get().hasNext()) {
-			it = of((Iterator<T>) query.setFirstResult(position)
-					.setMaxResults(pageSize).getResultList().iterator());
-			if (!it.get().hasNext())
-				return endOfData();
-		}
-		position++;
-		return it.get().next();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    protected T computeNext() {
+        if (!it.isPresent() || !it.get().hasNext()) {
+            it = of((Iterator<T>) query.setFirstResult(position).setMaxResults(pageSize)
+                    .getResultList().iterator());
+            if (!it.get().hasNext())
+                return endOfData();
+        }
+        position++;
+        return it.get().next();
+    }
 
-	public static class Builder<R> implements Iterable<R> {
-		private final Query query;
-		private final Class<R> cls;
-		private int pageSize = 100;
+    public static class Builder<R> implements Iterable<R> {
+        private final Query query;
+        private final Class<R> cls;
+        private int pageSize = 100;
 
-		public Builder(Query query, Class<R> cls) {
-			this.query = query;
-			this.cls = cls;
-		}
+        public Builder(Query query, Class<R> cls) {
+            this.query = query;
+            this.cls = cls;
+        }
 
-		public Builder<R> pageSize(int pageSize) {
-			this.pageSize = pageSize;
-			return this;
-		}
+        public Builder<R> pageSize(int pageSize) {
+            this.pageSize = pageSize;
+            return this;
+        }
 
-		@Override
-		public Iterator<R> iterator() {
-			return new QueryIterator<R>(query, pageSize, cls);
-		}
+        @Override
+        public Iterator<R> iterator() {
+            return new QueryIterator<R>(query, pageSize, cls);
+        }
 
-		public Query get() {
-			return query;
-		}
+        public Query get() {
+            return query;
+        }
 
-		public FluentIterable<R> fluent() {
-			return FluentIterable.from(this);
-		}
+        public FluentIterable<R> fluent() {
+            return FluentIterable.from(this);
+        }
 
-		public int executeUpdate() {
-			return query.executeUpdate();
-		}
+        public int executeUpdate() {
+            return query.executeUpdate();
+        }
 
-		public int getFirstResult() {
-			return query.getFirstResult();
-		}
+        public int getFirstResult() {
+            return query.getFirstResult();
+        }
 
-		public FlushModeType getFlushMode() {
-			return query.getFlushMode();
-		}
+        public FlushModeType getFlushMode() {
+            return query.getFlushMode();
+        }
 
-		public Map<String, Object> getHints() {
-			return query.getHints();
-		}
+        public Map<String, Object> getHints() {
+            return query.getHints();
+        }
 
-		public LockModeType getLockMode() {
-			return query.getLockMode();
-		}
+        public LockModeType getLockMode() {
+            return query.getLockMode();
+        }
 
-		public int getMaxResults() {
-			return query.getMaxResults();
-		}
+        public int getMaxResults() {
+            return query.getMaxResults();
+        }
 
-		public Parameter<?> getParameter(String arg0) {
-			return query.getParameter(arg0);
-		}
+        public Parameter<?> getParameter(String arg0) {
+            return query.getParameter(arg0);
+        }
 
-		public Parameter<?> getParameter(int arg0) {
-			return query.getParameter(arg0);
-		}
+        public Parameter<?> getParameter(int arg0) {
+            return query.getParameter(arg0);
+        }
 
-		public <S> Parameter<S> getParameter(String arg0, Class<S> arg1) {
-			return (Parameter<S>) query.getParameter(arg0, arg1);
-		}
+        public <S> Parameter<S> getParameter(String arg0, Class<S> arg1) {
+            return (Parameter<S>) query.getParameter(arg0, arg1);
+        }
 
-		public <S> Parameter<S> getParameter(int arg0, Class<S> arg1) {
-			return query.getParameter(arg0, arg1);
-		}
+        public <S> Parameter<S> getParameter(int arg0, Class<S> arg1) {
+            return query.getParameter(arg0, arg1);
+        }
 
-		public <S> S getParameterValue(Parameter<S> arg0) {
-			return query.getParameterValue(arg0);
-		}
+        public <S> S getParameterValue(Parameter<S> arg0) {
+            return query.getParameterValue(arg0);
+        }
 
-		public Object getParameterValue(String arg0) {
-			return query.getParameterValue(arg0);
-		}
+        public Object getParameterValue(String arg0) {
+            return query.getParameterValue(arg0);
+        }
 
-		public Object getParameterValue(int arg0) {
-			return query.getParameterValue(arg0);
-		}
+        public Object getParameterValue(int arg0) {
+            return query.getParameterValue(arg0);
+        }
 
-		public Set<Parameter<?>> getParameters() {
-			return query.getParameters();
-		}
+        public Set<Parameter<?>> getParameters() {
+            return query.getParameters();
+        }
 
-		public boolean isBound(Parameter<?> arg0) {
-			return query.isBound(arg0);
-		}
+        public boolean isBound(Parameter<?> arg0) {
+            return query.isBound(arg0);
+        }
 
-		public <S> S unwrap(Class<S> arg0) {
-			return query.unwrap(arg0);
-		}
+        public <S> S unwrap(Class<S> arg0) {
+            return query.unwrap(arg0);
+        }
 
-		@SuppressWarnings("unchecked")
-		public FluentIterable<R> getResultList() {
-			return FluentIterable.from((List<R>) query.getResultList());
-		}
+        @SuppressWarnings("unchecked")
+        public FluentIterable<R> getResultList() {
+            return FluentIterable.from((List<R>) query.getResultList());
+        }
 
-		@SuppressWarnings("unchecked")
-		public R getSingleResult() {
-			return (R) query.getSingleResult();
-		}
+        @SuppressWarnings("unchecked")
+        public R getSingleResult() {
+            return (R) query.getSingleResult();
+        }
 
-		public Builder<R> firstResult(int arg0) {
-			query.setFirstResult(0);
-			return this;
-		}
+        public Builder<R> firstResult(int arg0) {
+            query.setFirstResult(0);
+            return this;
+        }
 
-		public Builder<R> flushMode(FlushModeType arg0) {
-			query.setFlushMode(arg0);
-			return this;
-		}
+        public Builder<R> flushMode(FlushModeType arg0) {
+            query.setFlushMode(arg0);
+            return this;
+        }
 
-		public Builder<R> hint(String arg0, Object arg1) {
-			query.setHint(arg0, arg1);
-			return this;
-		}
+        public Builder<R> hint(String arg0, Object arg1) {
+            query.setHint(arg0, arg1);
+            return this;
+        }
 
-		public Builder<R> lockMode(LockModeType arg0) {
-			query.setLockMode(arg0);
-			return this;
-		}
+        public Builder<R> lockMode(LockModeType arg0) {
+            query.setLockMode(arg0);
+            return this;
+        }
 
-		public Builder<R> maxResults(int arg0) {
-			query.setMaxResults(arg0);
-			return this;
-		}
+        public Builder<R> maxResults(int arg0) {
+            query.setMaxResults(arg0);
+            return this;
+        }
 
-		public Builder<R> parameter(Parameter<R> arg0, R arg1) {
-			query.setParameter(arg0, arg1);
-			return this;
-		}
+        public Builder<R> parameter(Parameter<R> arg0, R arg1) {
+            query.setParameter(arg0, arg1);
+            return this;
+        }
 
-		public Builder<R> parameter(String arg0, Object arg1) {
-			query.setParameter(arg0, arg1);
-			return this;
-		}
+        public Builder<R> parameter(String arg0, Object arg1) {
+            query.setParameter(arg0, arg1);
+            return this;
+        }
 
-		public Builder<R> parameter(int arg0, Object arg1) {
-			query.setParameter(arg0, arg1);
-			return this;
-		}
+        public Builder<R> parameter(int arg0, Object arg1) {
+            query.setParameter(arg0, arg1);
+            return this;
+        }
 
-		public Builder<R> parameter(Parameter<Calendar> arg0, Calendar arg1,
-				TemporalType arg2) {
-			query.setParameter(arg0, arg1, arg2);
-			return this;
-		}
+        public Builder<R> parameter(Parameter<Calendar> arg0, Calendar arg1, TemporalType arg2) {
+            query.setParameter(arg0, arg1, arg2);
+            return this;
+        }
 
-		public Builder<R> parameter(Parameter<Date> arg0, Date arg1,
-				TemporalType arg2) {
-			query.setParameter(arg0, arg1);
-			return this;
-		}
+        public Builder<R> parameter(Parameter<Date> arg0, Date arg1, TemporalType arg2) {
+            query.setParameter(arg0, arg1);
+            return this;
+        }
 
-		public Builder<R> parameter(String arg0, Calendar arg1,
-				TemporalType arg2) {
-			query.setParameter(arg0, arg1, arg2);
-			return this;
-		}
+        public Builder<R> parameter(String arg0, Calendar arg1, TemporalType arg2) {
+            query.setParameter(arg0, arg1, arg2);
+            return this;
+        }
 
-		public Builder<R> parameter(String arg0, Date arg1, TemporalType arg2) {
-			query.setParameter(arg0, arg1, arg2);
-			return this;
-		}
+        public Builder<R> parameter(String arg0, Date arg1, TemporalType arg2) {
+            query.setParameter(arg0, arg1, arg2);
+            return this;
+        }
 
-		public Builder<R> parameter(int arg0, Calendar arg1, TemporalType arg2) {
-			query.setParameter(arg0, arg1, arg2);
-			return this;
-		}
+        public Builder<R> parameter(int arg0, Calendar arg1, TemporalType arg2) {
+            query.setParameter(arg0, arg1, arg2);
+            return this;
+        }
 
-		public Builder<R> parameter(int arg0, Date arg1, TemporalType arg2) {
-			query.setParameter(arg0, arg1, arg2);
-			return this;
-		}
-	}
+        public Builder<R> parameter(int arg0, Date arg1, TemporalType arg2) {
+            query.setParameter(arg0, arg1, arg2);
+            return this;
+        }
+    }
 }

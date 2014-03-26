@@ -18,80 +18,79 @@ import org.junit.Test;
 
 public class QueryIteratorTest {
 
-	@Test
-	public void testIteratorReturnsAllDocuments() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document order by id");
-		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.fluent().transform(toId).toList());
-		emf.close();
-	}
+    @Test
+    public void testIteratorReturnsAllDocuments() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document order by id");
+        assertEquals(newArrayList("a", "b", "c"), query(q, Document.class).fluent().transform(toId)
+                .toList());
+        emf.close();
+    }
 
-	@Test
-	public void testIteratorReturnsPartialListOfDocuments() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document where id > 'a' order by id");
-		assertEquals(newArrayList("b", "c"), query(q, Document.class).fluent()
-				.transform(toId).toList());
-		emf.close();
-	}
+    @Test
+    public void testIteratorReturnsPartialListOfDocuments() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document where id > 'a' order by id");
+        assertEquals(newArrayList("b", "c"), query(q, Document.class).fluent().transform(toId)
+                .toList());
+        emf.close();
+    }
 
-	@Test
-	public void testIteratorReturnsPartialListOfDocumentsUsingFuncitoHelper() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document where id > 'a' order by id");
-		assertEquals(newArrayList("b", "c"), query(q, Document.class).fluent()
-				.transform(f(c(Document.class).getId())).toList());
-		emf.close();
-	}
+    @Test
+    public void testIteratorReturnsPartialListOfDocumentsUsingFuncitoHelper() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document where id > 'a' order by id");
+        assertEquals(newArrayList("b", "c"),
+                query(q, Document.class).fluent().transform(f(c(Document.class).getId())).toList());
+        emf.close();
+    }
 
-	@Test
-	public void testIteratorReturnsNoDocuments() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document where id > 'c' order by id");
-		assertEquals(newArrayList(), query(q, Document.class).fluent()
-				.transform(toId).toList());
-		emf.close();
-	}
+    @Test
+    public void testIteratorReturnsNoDocuments() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document where id > 'c' order by id");
+        assertEquals(newArrayList(), query(q, Document.class).fluent().transform(toId).toList());
+        emf.close();
+    }
 
-	@Test
-	public void testIteratorReturnsAllDocumentsUsingTwoPages() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document order by id");
-		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.pageSize(2).fluent().transform(toId).toList());
-		emf.close();
-	}
+    @Test
+    public void testIteratorReturnsAllDocumentsUsingTwoPages() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document order by id");
+        assertEquals(newArrayList("a", "b", "c"), query(q, Document.class).pageSize(2).fluent()
+                .transform(toId).toList());
+        emf.close();
+    }
 
-	@Test
-	public void testIteratorReturnsAllDocumentsUsingThreePages() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document order by id");
-		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.pageSize(1).fluent().transform(toId).toList());
-		emf.close();
-	}
+    @Test
+    public void testIteratorReturnsAllDocumentsUsingThreePages() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document order by id");
+        assertEquals(newArrayList("a", "b", "c"), query(q, Document.class).pageSize(1).fluent()
+                .transform(toId).toList());
+        emf.close();
+    }
 
-	@Test
-	public void testGetOriginalQuery() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document order by id");
-		assertTrue(query(q, Document.class).get() instanceof Query);
-		emf.close();
-	}
+    @Test
+    public void testGetOriginalQuery() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document order by id");
+        assertTrue(query(q, Document.class).get() instanceof Query);
+        emf.close();
+    }
 
 }

@@ -18,27 +18,25 @@ import com.github.davidmoten.fjpa.Document;
 
 public class IteratorsFromDifferentPackageTest {
 
-	@Test
-	public void testTypedIteratorReturnsAllDocuments() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		TypedQuery<Document> q = em.createQuery("from Document order by id",
-				Document.class);
-		assertEquals(newArrayList("a", "b", "c"),
-				query(q).fluent().transform(toId).toList());
-		emf.close();
-	}
+    @Test
+    public void testTypedIteratorReturnsAllDocuments() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        TypedQuery<Document> q = em.createQuery("from Document order by id", Document.class);
+        assertEquals(newArrayList("a", "b", "c"), query(q).fluent().transform(toId).toList());
+        emf.close();
+    }
 
-	@Test
-	public void testIteratorReturnsAllDocuments() {
-		EntityManagerFactory emf = emf();
-		EntityManager em = emf.createEntityManager();
-		insertDocuments(em);
-		Query q = em.createQuery("from Document order by id");
-		assertEquals(newArrayList("a", "b", "c"), query(q, Document.class)
-				.fluent().transform(toId).toList());
-		emf.close();
-	}
+    @Test
+    public void testIteratorReturnsAllDocuments() {
+        EntityManagerFactory emf = emf();
+        EntityManager em = emf.createEntityManager();
+        insertDocuments(em);
+        Query q = em.createQuery("from Document order by id");
+        assertEquals(newArrayList("a", "b", "c"), query(q, Document.class).fluent().transform(toId)
+                .toList());
+        emf.close();
+    }
 
 }

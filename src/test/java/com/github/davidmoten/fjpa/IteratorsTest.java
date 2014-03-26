@@ -4,8 +4,8 @@ import org.junit.Test;
 
 public class IteratorsTest {
 
-	@Test
-	public void testForCoverage() {
-		Iterators.instantiateForTesting();
-	}
+    @Test
+    public void testForCoverage() {
+        Iterators.instantiateForTesting();
+    }
 }

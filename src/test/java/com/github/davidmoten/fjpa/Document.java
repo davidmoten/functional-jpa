@@ -12,21 +12,20 @@ import com.google.common.base.Function;
 @Entity
 public class Document {
 
-	@Id
-	private String id;
+    @Id
+    private String id;
 
-	public Document(String id) {
-		this.id = id;
-	}
+    public Document(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	@Column
-	public String status;
+    @Column
+    public String status;
 
-	public static Function<Document, String> toId = functionFor(callsTo(
-			Document.class).getId());
+    public static Function<Document, String> toId = functionFor(callsTo(Document.class).getId());
 
 }
