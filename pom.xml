@@ -11,7 +11,7 @@
 
 	<groupId>com.github.davidmoten</groupId>
 	<artifactId>functional-jpa</artifactId>
-	<version>0.1</version>
+	<version>0.1.1-SNAPSHOT</version>
 
 	<name>${project.artifactId}</name>
 	<description>use guava libraries with jpa objects </description>
