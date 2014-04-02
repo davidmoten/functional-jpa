@@ -4,7 +4,7 @@ functional-jpa
 Functional style helpers for jpa and guava (tests fine with 16.0). Has an optional dependency 
 on rx-java if you wish to use Observables (which are very cool!).
 
-Status: *pre-alpha*
+Status: *alpha*
 
 Features
 -------------------
@@ -15,6 +15,18 @@ Features
 * can return result set as *rx-java* Observable
 * RichEntityManager.run handles try catch final noise for closing resources and logging (slf4j)
 * Funcito helper methods
+
+Getting started
+------------------
+Add this dependency to your project:
+
+```java
+<dependency>
+  <groupId>com.github.davidmoten</groupId>
+  <artifactId>functional-jpa</artifactId>
+  <version>0.1</version>
+</dependency>
+```
 
 Query iterators
 ------------------
