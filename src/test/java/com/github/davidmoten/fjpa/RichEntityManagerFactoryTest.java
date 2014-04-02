@@ -15,22 +15,20 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import javax.persistence.EntityTransaction;
 
 import org.easymock.EasyMock;
-import org.funcito.FuncitoRxJava;
 import org.junit.Test;
-
-import rx.Observable;
-import rx.util.functions.Action1;
-import rx.util.functions.Function;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 public class RichEntityManagerFactoryTest {
+
+	private static final Charset UTF8 = Charset.forName("UTF-8");
 
 	@Test
 	public void testRichEmf() {
@@ -109,7 +107,7 @@ public class RichEntityManagerFactoryTest {
 		InputStream is = new ByteArrayInputStream(commands.toString()
 				.getBytes());
 		RichEntityManagerFactory emf = emf("test");
-		long count = emf.runScript(is).em().count(Document.class);
+		long count = emf.runScript(is, UTF8).em().count(Document.class);
 		emf.close();
 		assertEquals(2, count);
 	}
@@ -123,7 +121,7 @@ public class RichEntityManagerFactoryTest {
 		InputStream is = new ByteArrayInputStream(commands.toString()
 				.getBytes());
 		RichEntityManagerFactory emf = emf("test");
-		long count = emf.runScript(is).em().count(Document.class);
+		long count = emf.runScript(is, UTF8).em().count(Document.class);
 		emf.close();
 		assertEquals(2, count);
 	}

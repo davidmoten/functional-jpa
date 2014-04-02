@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
@@ -155,8 +156,8 @@ public class RichEntityManagerFactory {
 		return run(task, true, true);
 	}
 
-	public RichEntityManagerFactory runScript(InputStream is) {
-		final StringBuffer s = readString(is);
+	public RichEntityManagerFactory runScript(InputStream is, Charset charset) {
+		final StringBuffer s = readString(is, charset);
 		String[] items = s.toString().split(";");
 		List<String> commands = from(newArrayList(items)).filter(notNull())
 				.toList();
@@ -178,8 +179,9 @@ public class RichEntityManagerFactory {
 		});
 	}
 
-	private static StringBuffer readString(InputStream is) {
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+	private static StringBuffer readString(InputStream is, Charset charset) {
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,
+				charset));
 		return readString(br);
 	}
 

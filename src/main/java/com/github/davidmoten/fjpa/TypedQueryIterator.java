@@ -39,7 +39,7 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 
 	@Override
 	protected T computeNext() {
-		System.out.println("computing next, position="+ position);
+		System.out.println("computing next, position=" + position);
 		if (!it.isPresent() || !it.get().hasNext()) {
 			it = of(query.setFirstResult(position).setMaxResults(pageSize)
 					.getResultList().iterator());
@@ -77,9 +77,9 @@ class TypedQueryIterator<T> extends AbstractIterator<T> {
 		}
 
 		public Observable<T> observable() {
-			return Observable.from(FluentIterable.from(this));
+			return Observable.from(fluent());
 		}
-		
+
 		public int executeUpdate() {
 			return query.executeUpdate();
 		}

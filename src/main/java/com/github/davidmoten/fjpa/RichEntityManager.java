@@ -36,6 +36,11 @@ public class RichEntityManager {
 		return this;
 	}
 
+	/**
+	 * Begins transaction.
+	 * 
+	 * @return
+	 */
 	public RichEntityManager begin() {
 		em.getTransaction().begin();
 		return this;

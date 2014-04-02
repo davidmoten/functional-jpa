@@ -24,13 +24,15 @@ of the result set of a query (which uses `setFirst` and `setMaxResults` for pagi
 
 To get a rich version of an `EntityManagerFactory`:
 
-    EntityManagers.enrich(normalEmf); 
+```java
+    EntityManagers.enrich(normalEmf);
+ ``` 
     
 Now to an example:
 
 Given this jpa class (note the use of [Funcito](https://code.google.com/p/funcito/) to create the guava function for id):
 
-```
+```java
 @Entity
 public class Document {
     @Id
@@ -53,7 +55,7 @@ public class Document {
 ```
 You can do stuff like this:
 
-```
+```java
 import com.github.davidmoten.fjpa.EntityManagers;
 
 RichEntityManagerFactory emf = EntityManagers.emf("test");
@@ -70,7 +72,7 @@ List<String> list =
 ```
 
 or using Java 8 lambdas:
-```
+```java
 // get a list of all ids in documents
 List<String> list =
     em
@@ -86,7 +88,7 @@ Eliminating try-catch-final noise
 You can also get the `RichEntityManagerFactory` to perform all of the usual try-catch-final 
 closing of resources and logging of errors using the `RichEntityManagerFactory` run method:
 
-```
+```java
 RichEntityManagerFactory emf = EntityManagers.emf("test");
 List<String> list = 
 		emf.run(new Task<List<String>>() {
@@ -107,7 +109,7 @@ emf.close();
 
 or using method chaining even further for the same result:
 
-```
+```java
 emf("test") 
   .run(new Task<List<String>>() {
 	@Override
@@ -132,7 +134,7 @@ emf("test")
 
 or the same again but using Java 8 lambdas for less noise:
 
-```
+```java
 emf("test")
    .run(em -> em.persist(new Document("a"))
 				.persist(new Document("b"))

@@ -23,11 +23,24 @@ public class ObservableTest {
 	@Test
 	public void testObservableRunningAsync() {
 		final RichEntityManager em = emf("test").em();
-		Observable<List<String>> observable = em.begin()
-				.persist(new Document("a")).persist(new Document("b"))
-				.persist(new Document("c")).commit()
+		Observable<List<String>> observable = em
+		// begin transaction
+				.begin()
+				// persist a document
+				.persist(new Document("a"))
+				// persist one more
+				.persist(new Document("b"))
+				// persist one more
+				.persist(new Document("c"))
+				// commit
+				.commit()
+				// get all documents
 				.createQuery("from Document order by id", Document.class)
-				.observable().map(func1For(callsTo(Document.class).getId()))
+				// as observable
+				.observable()
+				// to id
+				.map(func1For(callsTo(Document.class).getId()))
+				// to list
 				.toList();
 		observable.subscribe(new Observer<List<String>>() {
 			@Override
@@ -50,17 +63,16 @@ public class ObservableTest {
 		});
 		log.info("finished 1");
 	}
-	
+
 	@Test
 	public void testObservableBlocking() {
 		final RichEntityManager em = emf("test").em();
-		List<String> list = em.begin()
-				.persist(new Document("a")).persist(new Document("b"))
-				.persist(new Document("c")).commit()
+		List<String> list = em.begin().persist(new Document("a"))
+				.persist(new Document("b")).persist(new Document("c")).commit()
 				.createQuery("from Document order by id", Document.class)
 				.observable().map(func1For(callsTo(Document.class).getId()))
 				.toList().toBlockingObservable().single();
-		assertEquals(newArrayList("a", "b", "c"), list); 
+		assertEquals(newArrayList("a", "b", "c"), list);
 		em.closeFactory();
 		log.info("finished 2");
 	}
