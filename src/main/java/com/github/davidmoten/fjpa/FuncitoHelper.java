@@ -4,6 +4,9 @@ import org.funcito.FuncitoGuava;
 
 import com.google.common.base.Function;
 
+/**
+ * Utility methods for use with the Funcito library.
+ */
 public class FuncitoHelper {
 
 	public static <T> T c(Class<T> cls) {
