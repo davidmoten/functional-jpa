@@ -18,7 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <cobertura.version>2.5.2</cobertura.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <guava.version>14.0.1</guava.version>
+    <guava.version>16.0.1</guava.version>
     <maven.compiler.target>1.6</maven.compiler.target>
     <hibernate.version>3.5.4-Final</hibernate.version>
   </properties>
@@ -66,7 +66,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>16.0</version>
+      <version>${guava.version}</version>
     </dependency> 
 
     <dependency>
@@ -85,7 +85,7 @@
     <dependency>
       <groupId>com.netflix.rxjava</groupId>
       <artifactId>rxjava-core</artifactId>
-      <version>0.16.1</version>
+      <version>0.17.0</version>
       <optional>true</optional>
     </dependency>
     
