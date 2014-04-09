@@ -205,19 +205,19 @@ Using Observables
 Support for rxjava is limited to evaluating queries:
 ```java
  Observable<Document> documents = em
-        // begin transaction
-                .begin()
-                // persist a document
-                .persist(new Document("a"))
-                // persist one more
-                .persist(new Document("b"))
-                // persist one more
-                .persist(new Document("c"))
-                // commit
-                .commit()
-                // get all documents
-                .createQuery("from Document order by id", Document.class)
-                // as observable
-                .observable();
+     // begin transaction
+     .begin()
+     // persist a document
+    .persist(new Document("a"))
+    // persist one more
+    .persist(new Document("b"))
+    // persist one more
+    .persist(new Document("c"))
+    // commit
+    .commit()
+    // get all documents
+    .createQuery("from Document order by id", Document.class)
+    // as observable
+        .observable();
  ```
  In the example above a, b, and c are persisted and committed but the query is not run until the documents observable is subscribed to. 
