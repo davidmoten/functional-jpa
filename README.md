@@ -220,4 +220,4 @@ Support for rxjava is limited to evaluating queries:
                 // as observable
                 .observable();
  ```
- In the example above a, b, and c are persisted and committed but the query is not run until the observable is subscribed to.
+ In the example above a, b, and c are persisted and committed but the query is not run until the observable is subscribed to. 
