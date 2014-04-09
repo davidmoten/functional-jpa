@@ -198,3 +198,26 @@ List<String> list =
 	   .transform(f(c(Document.class).getId())  //get id (lazily)
 	   .toList();          //force evaluation to list
 ```
+
+
+Using Observables
+---------------------
+Support for rxjava is limited to evaluating queries:
+```java
+ Observable<Document> observable = em
+        // begin transaction
+                .begin()
+                // persist a document
+                .persist(new Document("a"))
+                // persist one more
+                .persist(new Document("b"))
+                // persist one more
+                .persist(new Document("c"))
+                // commit
+                .commit()
+                // get all documents
+                .createQuery("from Document order by id", Document.class)
+                // as observable
+                .observable();
+ ```
+ In the example above a, b, and c are persisted and committed but the query is not run until the observable is subscribed to.
