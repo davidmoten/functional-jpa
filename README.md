@@ -2,9 +2,13 @@ functional-jpa
 ==============
 
 Functional style helpers for jpa and guava (tests fine with 16.0.1). Has an optional dependency 
-on rx-java if you wish to use Observables (which are very cool!).
+on [RxJava](http://github.com/Netflix/RxJava) if you wish to use Observables (which are very cool!).
 
-Status: *alpha*
+Status: *released to Maven Central*
+
+Release notes
+--------------
+* 0.1 inital release to Maven Central
 
 Features
 -------------------
@@ -12,7 +16,7 @@ Features
 * improved Query builder
 * lazy iteration and paging of result sets (great for large result sets)
 * can return result set as Guava FluentIterable 
-* can return result set as *rx-java* Observable
+* can return result set as [RxJava](http://github.com/Netflix/RxJava) Observable
 * RichEntityManager.run handles try catch final noise for closing resources and logging (slf4j)
 * Funcito helper methods
 
