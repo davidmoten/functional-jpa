@@ -107,18 +107,19 @@ closing of resources and logging of errors using the `RichEntityManagerFactory` 
 ```java
 RichEntityManagerFactory emf = EntityManagers.emf("test");
 List<String> list = 
-		emf.run(new Task<List<String>>() {
-			@Override
-			public List<String> run(RichEntityManager em) {
-				return em
-						.persist(new Document("a"))
-						.persist(new Document("b"))
-						.persist(new Document("c"))
-						.createQuery("from Document order by id",
-								Document.class).fluent()
-						.transform(toId).toList();
-			}
-		});
+	emf.run(new Task<List<String>>() {
+		@Override
+		public List<String> run(RichEntityManager em) {
+			return em
+					.persist(new Document("a"))
+					.persist(new Document("b"))
+					.persist(new Document("c"))
+					.createQuery("from Document order by id",
+							Document.class)
+				    .fluent()
+	    			.transform(toId).toList();
+		}
+	});
 assertEquals(newArrayList("a", "b", "c"), list);
 emf.close();
 ```
@@ -218,6 +219,6 @@ Support for rxjava is limited to evaluating queries:
     // get all documents
     .createQuery("from Document order by id", Document.class)
     // as observable
-        .observable();
+    .observable();
  ```
  In the example above a, b, and c are persisted and committed but the query is not run until the documents observable is subscribed to. 
