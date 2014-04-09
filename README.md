@@ -167,17 +167,19 @@ Funcito helper methods
 wonderfully concise creation of Guava Functions.
 
 For example:
-```
+```java
 Function<Document,String> toId = functionFor(callsTo(Document.class).getId());
 ```
 
 I love it but its a bit verbose so I added a simple `FuncitoHelper` class to functional-jpa that allows for an abbreviated version:
-```
+```java
+import com.github.davidmoten.fjpa.FuncitoHelper.*;
+
 Function<Document,String> toId = f(c(Document.class).getId();
 ```
 
 Here's an example using *functional-jpa* that is very close in conciseness to using Java 8 lambdas:
-```
+```java
 import com.github.davidmoten.fjpa.EntityManagers;
 
 RichEntityManagerFactory emf = EntityManagers.emf("test");
