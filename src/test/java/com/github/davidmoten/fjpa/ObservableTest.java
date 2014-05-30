@@ -2,8 +2,6 @@ package com.github.davidmoten.fjpa;
 
 import static com.github.davidmoten.fjpa.EntityManagers.emf;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.funcito.FuncitoRxJava.callsTo;
-import static org.funcito.FuncitoRxJava.func1For;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -14,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import rx.Observable;
 import rx.Observer;
+import rx.functions.Func1;
 
 public class ObservableTest {
 
@@ -38,7 +37,7 @@ public class ObservableTest {
                 // as observable
                 .observable()
                 // to id
-                .map(func1For(callsTo(Document.class).getId()))
+                .map(toDocumentId)
                 // to list
                 .toList();
         observable.subscribe(new Observer<List<String>>() {
@@ -80,7 +79,7 @@ public class ObservableTest {
                 // to observable
                 .observable()
                 // get id
-                .map(func1For(callsTo(Document.class).getId()))
+                .map(toDocumentId)
                 // as a list
                 .toList()
                 // block and get result
@@ -89,4 +88,12 @@ public class ObservableTest {
         em.closeFactory();
         log.info("finished 2");
     }
+
+    private final Func1<Document, String> toDocumentId = new Func1<Document, String>() {
+
+        @Override
+        public String call(Document document) {
+            return document.getId();
+        }
+    };
 }

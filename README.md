@@ -8,6 +8,7 @@ Status: *released to Maven Central*
 
 Release notes
 --------------
+* 0.1.1-SNAPSHOT use rxjava-core 0.18.3, guava 17.0
 * 0.1 inital release to Maven Central
 
 Features
