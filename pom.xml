@@ -104,7 +104,7 @@
 		<dependency>
 			<groupId>com.netflix.rxjava</groupId>
 			<artifactId>rxjava-core</artifactId>
-			<version>0.18.4</version>
+			<version>0.19.6</version>
 			<optional>true</optional>
 		</dependency>
 
