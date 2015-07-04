@@ -25,7 +25,7 @@ Getting started
 ------------------
 Add this dependency to your project:
 
-```java
+```xml
 <dependency>
   <groupId>com.github.davidmoten</groupId>
   <artifactId>functional-jpa</artifactId>
